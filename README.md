@@ -1,4 +1,4 @@
 # spalate-template
 
 
-created by <template commit version>
+created by \<template commit version\>
