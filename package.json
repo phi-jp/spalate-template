@@ -19,12 +19,12 @@
     "test": ""
   },
   "config": {
-    "stg": "{{ name }}_stg",
-    "prod": "{{ name }}_prod"
+    "stg": "{{ project }}_stg",
+    "prod": "{{ project }}_prod"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "spalate": "git://github.com/phi-jp/spalate.git#4f22c8c3a5e4c074816c3076bc312a179e4b00ad"
+    "spalate": "git://github.com/phi-jp/spalate.git#240af9e68bacc807652ba70d54e393e129fd2c33"
   }
 }

@@ -1,54 +1,88 @@
 spalate:
+  # ssr: true
   views:
-    head: 'hoge'
-    body: 'hoge'
+    default: app/views/default.pug
   static:
     - 'public'
     - 'app/assets'
-  router: '/app/assets/scripts/router.js'
+  # フロント/サーバー両方で使うコード
+  modules:
+    target:
+      - router: './app/assets/scripts/router.js'
+      - Routeful: routeful
+      - helmeta
+      - Firerest: firerest
+      - QuerySearch: querysearch
+      - _: underscore
+      - app: 'public/scripts/app.js'
+    output: 'public/scripts/modules.js'
   riot:
     target: 'app/tags'
-    output: 'public/scripts'
+    output: 'public/scripts/tags.js'
     options:
       template: 'pug'
   style:
     type: less
     entry: 'app/assets/styles/main.less'
     target: 'app/assets/styles/'
-    output: 'public/styles'
+    output: 'public/styles/main.css'
   iconfont:
     target: 'public/images/icons'
     output: 'public/fonts/icons'
-  includes:
-    - { type: 'script', path: '/scripts/router.js' }
-    - { type: 'script', path: '/scripts/tags.js' }
-    - { type: 'script', path: '/scripts/main.js' }
-    - { type: 'style', path: '/styles/main.css', }
-    - { type: 'style', path: '/fonts/icons/icons.css', }
-  deploy:
-    circleci:
-      app: '<%= name %>'
-      branches:
-        master: 'prod-env'
-        develop: 'stg-env'
+  # logger:
+  #   type: 'dev'
+  plugins:
+    - 'redirect.js'
   cordova:
     platforms:
       - ios
       - android
-    target: 'spalate-test'
+    target: 'test-app'
     output: 'public/plugins/cordova'
-config:
+    
+client:
   env: default
-  meta:
-    title: <%= name %>
-    keywords: web,tool
-    description: Hello, client template!
+  head:
+    title: spalate-test
+    description: Hello, spalate!
     type: website
-    image: ""
+    image: /images/ogp.png
     favicon: /images/icon.png
     url: https://rabee.jp
-  api:
-    endpoint: http://jsonplaceholder.typicode.com
+    meta:
+      - { name: viewport, content: "width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,viewport-fit=cover" }
+      - { name: apple-mobile-web-app-capable, content: "yes" }
+      - { name: apple-mobile-web-app-status-bar-style, content: "black-translucent" }
+    link:
+      - { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
+      - { rel: "stylesheet", href: "/spalate/plugins/meltline.css" }
+      - { rel: "stylesheet", href: "/fonts/icons/icons.css" }
+      - { rel: "stylesheet", href: "/styles/main.css" }
+    script:
+      # jquery
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js' }
+      # moment.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
+      # marked js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.17/marked.js' }
+      # my plugins
+      - { src: '/spalate/plugins/uuaa.js' }
+      - { src: '/spalate/plugins/socialink.js' }
+      - { src: '/spalate/plugins/sclazy.js' }
+      - { src: '/spalate/plugins/vercom.js' }
+      - { src: '/spalate/plugins/flickable.js' }
+      # node modules
+      - { src: '/scripts/modules.js' }
+      # user
+      - { src: "/scripts/tags.js" }
+      - { src: "/scripts/main.js" }
+  firerest:
+    endpoint: https://jsonplaceholder.typicode.com
     cacheKey: noteput.auth.token
     tokenKey: X-Noteput-Token
     debug: true
+  app:
+    ios:
+      version: '2.0.0'
+      url: 'https://google.com'
