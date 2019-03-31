@@ -1,21 +1,30 @@
 {
-  "name": "<%= name %>",
+  "name": "{{ name }}",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "spalate build",
-    "start": "npm run build; spalate start",
-    "dev": "npm run build; spalate dev",
-    "deploy": "spalate deploy",
+    "start": "spalate start",
+    "dev": "spalate build; spalate dev",
+
+    "deploy": "npm run build; gcloud app deploy --project $npm_package_config_stg gae_stg.yaml -q",
+    "browse": "gcloud app browse --project $npm_package_config_stg --service default",
+    "deploy_prod": "npm run build; gcloud app deploy --project $npm_package_config_prod gae_prod.yaml -q",
+    "browse_prod": "gcloud app browse --project $npm_package_config_prod --service default",
+    
     "iconfont": "spalate iconfont",
+    "browse_icon": "open public/fonts/icons/icons-preview.html",
+
     "test": ""
+  },
+  "config": {
+    "stg": "{{ name }}_stg",
+    "prod": "{{ name }}_prod"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "spalate": "<%= spalateVersion %>",
-    "node-fetch": "^2.3.0",
-    "rss-generator": "^0.0.2"
+    "spalate": "git://github.com/phi-jp/spalate.git#4f22c8c3a5e4c074816c3076bc312a179e4b00ad"
   }
 }
