@@ -67,6 +67,9 @@ client:
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
       # marked js
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.17/marked.js' }
+      # faker.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/locales/ja/faker.ja.js' }
       # my plugins
       - { src: '/spalate/plugins/uuaa.js' }
       - { src: '/spalate/plugins/socialink.js' }
