@@ -3,7 +3,7 @@ page-groups-single(spat-animation='slide')
     module-header(back='{true}', title='{item.data.title}')
     div.h-full.overflow-scroll
       div.container.p10
-        div.box-shadow.bg-white.p16.rounded-4.mb16(each='{message in messages}') {message.data.body}
+        div.mb16(data-is='item-message', each='{message in messages}', item='{message}')
   div.fixed.b0.w-full.bg-white
     form.container.p8.f(onsubmit='{send}', action='')
       input.bg-whitesmoke.w-full.p8.rounded-4.fs13(ref='input', placeholder='Aa')
@@ -19,7 +19,7 @@ page-groups-single(spat-animation='slide')
 
       this.messages = [];
 
-      this.item.doc.ref.collection('messages').watch(({change, item, isNew}) => {
+      this.observer = await this.item.doc.ref.collection('messages').watch(({change, item, isNew}) => {
         this.messages.push(item);
         this.messages.sort((a, b) => {
           return a.data.created_at - b.data.created_at;
@@ -29,6 +29,10 @@ page-groups-single(spat-animation='slide')
       });
 
       this.update();
+    });
+
+    this.on('hide', () => {
+      this.observer();
     });
 
     this.send = async (e) => {
