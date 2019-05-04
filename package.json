@@ -1,5 +1,5 @@
 {
-  "name": "spalate-template",
+  "name": "spalate-chat",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,21 +10,21 @@
 
     "deploy": "npm run build; gcloud app deploy --project $npm_package_config_stg gae_stg.yaml -q",
     "browse": "gcloud app browse --project $npm_package_config_stg --service default",
-    "deploy_prod": "npm run build; gcloud app deploy --project $npm_package_config_prod gae_prod.yaml -q",
-    "browse_prod": "gcloud app browse --project $npm_package_config_prod --service default",
+    "deploy:prod": "npm run build; gcloud app deploy --project $npm_package_config_prod gae_prod.yaml -q",
+    "browse:prod": "gcloud app browse --project $npm_package_config_prod --service default",
     
     "iconfont": "spalate iconfont",
-    "browse_icon": "open public/fonts/icons/icons-preview.html",
+    "browse:icon": "open public/fonts/icons/icons-preview.html",
 
     "test": ""
   },
   "config": {
-    "stg": "{{ project }}_stg",
-    "prod": "{{ project }}_prod"
+    "stg": "spalate-chat_stg",
+    "prod": "spalate-chat_prod"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "spalate": "git://github.com/phi-jp/spalate.git#7eb52ea574e643dc8ad41dbc00751007202a8c32"
+    "spalate": "git://github.com/phi-jp/spalate.git#a83dc1aa65b32bc51733e2127b6927342c251b69"
   }
 }
