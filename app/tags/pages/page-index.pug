@@ -18,14 +18,7 @@ page-index
     };
 
     this.on('mount', async () => {
-      var ss = await flarestore.db.collection('groups').get();
-      this.items = ss.docs.map((doc) => {
-        return {
-          doc: doc,
-          id: doc.id,
-          data: doc.data(),
-        }
-      });
+      this.items = await flarestore.db.collection('groups').orderBy('created_at', 'desc').getWithRelation();
       this.update();
     });
     

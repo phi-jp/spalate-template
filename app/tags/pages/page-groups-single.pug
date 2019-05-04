@@ -15,29 +15,16 @@ page-groups-single(spat-animation='slide')
 
   script.
     this.on('show', async (e) => {
-      var doc = await flarestore.db.collection('groups').doc(e.opts.id).get();
-      this.item = {
-        id: doc.id,
-        doc: doc,
-        data: doc.data(),
-      };
+      this.item = await flarestore.db.collection('groups').doc(e.opts.id).getWithRelation();
 
       this.messages = [];
 
-      this.item.doc.ref.collection('messages').onSnapshot(ss => {
-        var messages = ss.docChanges().map(change => {
-          var doc = change.doc;
-          return {
-            id: doc.id,
-            doc: doc,
-            data: doc.data(),
-          };
-        });
-
-        this.messages = this.messages.concat(messages);
+      this.item.doc.ref.collection('messages').watch(({change, item, isNew}) => {
+        this.messages.push(item);
         this.messages.sort((a, b) => {
           return a.data.created_at - b.data.created_at;
         });
+
         this.update();
       });
 
