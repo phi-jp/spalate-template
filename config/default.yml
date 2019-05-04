@@ -70,6 +70,12 @@ client:
       # faker.js
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js' }
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/locales/ja/faker.ja.js' }
+      # firebase
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-app.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-auth.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-database.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-firestore.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
       # my plugins
       - { src: '/spalate/plugins/uuaa.js' }
       - { src: '/spalate/plugins/socialink.js' }
@@ -79,6 +85,9 @@ client:
       # node modules
       - { src: '/scripts/modules.js' }
       # user
+      - { src: "/scripts/flarestore.js" }
+      - { src: "/scripts/auth.js" }
+      - { src: "/scripts/storage.js" }
       - { src: "/scripts/tags.js" }
       - { src: "/scripts/main.js" }
   firerest:
@@ -86,6 +95,13 @@ client:
     cacheKey: noteput.auth.token
     tokenKey: X-Noteput-Token
     debug: true
+  firebase:
+    apiKey: "AIzaSyCiJjzLD4C5ueJ2wP3UVmdTa7BfiqnWu5Q"
+    authDomain: "chat-rabee-jp.firebaseapp.com"
+    databaseURL: "https://chat-rabee-jp.firebaseio.com"
+    projectId: "chat-rabee-jp"
+    storageBucket: "chat-rabee-jp.appspot.com"
+    messagingSenderId: "50741122756"
   app:
     ios:
       version: '2.0.0'

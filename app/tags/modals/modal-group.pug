@@ -1,0 +1,39 @@
+modal-group(spat-animation='bottom')
+  div.f.flex-column.bg-white.h-full(ref='modal')
+    module-header(title='グループ作成')
+    form.px50.py32.text-center(onsubmit='{submit}')
+      img.s128.circle.object-fit-cover.mb16(src='{data.image.url}')
+      input.border.p8.rounded-4.w-full.mb32(ref='title', placeholder='グループ名', required)
+      button.button.primary 作成
+  
+  script.
+    this.on('mount', () => {
+      this.data = {
+        title: '',
+        image: {
+          url: faker.image.image(),
+        },
+      };
+      this.update();
+    });
+
+    this.submit = async (e) => {
+      e.preventDefault();
+
+      var uid = firebase.auth().getUid();
+
+      var data = {
+        title: this.refs.title.value,
+        image: {
+          url: this.data.image.url,
+        },
+        created_at: Date.now(),
+        updated_at: Date.now(),
+        user_id: uid,
+        user_ref: flarestore.db.collection('users').doc(uid),
+      };
+
+      await flarestore.db.collection('groups').add(data);
+
+      this.close();
+    };
