@@ -4,7 +4,7 @@ page-index
     div.h-full.overflow-scroll
       div.container
         div.posts
-          div.m8(data-is='item-chat', each='{item in items}', item='{item}')
+          div.m16(data-is='item-chat', each='{item in items}', item='{item}')
     module-tabbar
 
   script.
@@ -29,6 +29,9 @@ page-index
       this.update();
     });
     
-    this.on('show', () => {
+    this.on('show', async () => {
       console.log('show');
+
+      //- var base64 = await app.utils.imageToBase64(faker.image.image());
+      //- firebase.storage().ref('hoge/foo').child('test').putString(image, 'base64', {contentType:'image/jpg'});
     });
