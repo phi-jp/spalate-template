@@ -1,20 +1,24 @@
-page-users-single
+page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
   div.flex.flex-column.h-full
     div.h-full.overflow-scroll
       //- header
-      div.bg-primary.h36vh.relative
-        div.absolute.bn40.f.fh.w-full
-          img.object-fit-cover.circle.s80.border.border-white.border-width-4.box-shadow(src='{user.data.image.url}')
+      div.bg-primary.h32vh.relative
       div.container
-        div.posts
-          div.m16(data-is='item-chat', each='{item in items}', item='{item}')
+        div.px32.mtn40.relative
+          div.f.fh.mb16
+            img.object-fit-cover.circle.s80.bg-white.border.border-white.border-width-4.box-shadow(src='{user.data.image.url}')
+          div.text-center.bold.mb16 {user.data.name || user.data.screen_name}
+          p.mb32 {user.data.profile}
+          div.f.fh
+            button.button.primary(if='{is_mypage}') プロフィール編集
+
     module-tabbar
 
   style(type='less').
     :scope {
       display: block;
-      .bn40 {
-        bottom: -40px;
+      .mtn40 {
+        margin-top: -40px;
       }
     }
 
@@ -23,11 +27,17 @@ page-users-single
     this.on('show', async (e) => {
       if (e.opts.id) {
         this.is_mypage = false;
+        this.update();
+
+        var ref = flarestore.db.collection('users').where('screen_name', '==', e.opts.id);
+        var items = await ref.getWithRelation();
+        this.user = items[0];
       }
       else {
+        this.is_mypage = true;
+        this.update();
         var uid = firebase.auth().getUid();
         this.user = await flarestore.db.collection('users').doc(uid).getWithRelation();
-        this.is_mypage = true;
       }
 
       this.update();
