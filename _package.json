@@ -1,5 +1,5 @@
 {
-  "name": "spalate-chat",
+  "name": "<%= name %>",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,8 +19,8 @@
     "test": ""
   },
   "config": {
-    "stg": "spalate-chat_stg",
-    "prod": "spalate-chat_prod"
+    "stg": "<%= name %>_stg",
+    "prod": "<%= name %>_prod"
   },
   "author": "",
   "license": "MIT",

@@ -4,7 +4,7 @@
 
   exports.map = {
     '/items/:id': {
-      tag: 'page-items-detail',
+      tag: 'page-items-single',
     },
     '/:page': {
       tag: function(req, res) {
