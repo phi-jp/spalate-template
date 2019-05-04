@@ -1,0 +1,37 @@
+page-users-single
+  div.flex.flex-column.h-full
+    div.h-full.overflow-scroll
+      //- header
+      div.bg-primary.h36vh.relative
+        div.absolute.bn40.f.fh.w-full
+          img.object-fit-cover.circle.s80.border.border-white.border-width-4.box-shadow(src='{user.data.image.url}')
+      div.container
+        div.posts
+          div.m16(data-is='item-chat', each='{item in items}', item='{item}')
+    module-tabbar
+
+  style(type='less').
+    :scope {
+      display: block;
+      .bn40 {
+        bottom: -40px;
+      }
+    }
+
+  script.
+    
+    this.on('show', async (e) => {
+      if (e.opts.id) {
+        this.is_mypage = false;
+      }
+      else {
+        var uid = firebase.auth().getUid();
+        this.user = await flarestore.db.collection('users').doc(uid).getWithRelation();
+        this.is_mypage = true;
+      }
+
+      this.update();
+
+      //- var base64 = await app.utils.imageToBase64(faker.image.image());
+      //- firebase.storage().ref('hoge/foo').child('test').putString(image, 'base64', {contentType:'image/jpg'});
+    });
