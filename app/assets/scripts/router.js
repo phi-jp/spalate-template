@@ -3,8 +3,14 @@
 ;(function(exports) {
 
   exports.map = {
-    '/items/:id': {
-      tag: 'page-items-single',
+    '/groups/:id': {
+      tag: 'page-groups-single',
+    },
+    '/users/:id': {
+      tag: 'page-users-single',
+    },
+    '/mypage': {
+      tag: 'page-users-single',
     },
     '/:page': {
       tag: function(req, res) {

@@ -4,7 +4,7 @@ page-index
     div.h-full.overflow-scroll
       div.container
         div.posts
-          div.m8(data-is='item-post', each='{item in posts}', item='{item}')
+          div.m16(data-is='item-chat', each='{item in items}', item='{item}')
     module-tabbar
 
   script.
@@ -17,10 +17,13 @@ page-index
       };
     };
 
-    this.on('mount', () => {
-      console.log('mount');
+    this.on('mount', async () => {
     });
     
-    this.on('show', function() {
-      console.log('show');
+    this.on('show', async () => {
+      this.items = await flarestore.db.collection('groups').orderBy('updated_at', 'desc').getWithRelation();
+      this.update();
+
+      //- var base64 = await app.utils.imageToBase64(faker.image.image());
+      //- firebase.storage().ref('hoge/foo').child('test').putString(image, 'base64', {contentType:'image/jpg'});
     });

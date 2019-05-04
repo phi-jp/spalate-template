@@ -1,0 +1,20 @@
+item-message
+  div.f.fr(class='{"flex-row-reverse": !isMe()}')
+    div.box-shadow.bg-white.p16.rounded-4.max-width-70per
+      p {opts.item.data.body}
+    a.flex-fixed.text-center.mx8(href='/users/{opts.item.data.user.id}')
+      img.s32.circle.object-fit-cover.border.mb4(src='{opts.item.data.user.data.image.url}')
+      div.fs10 {opts.item.data.user.data.name || '名無し'}
+  
+  style(type='less').
+    :scope {
+      display: block;
+      .max-width-70per {
+        max-width: 70%;
+      }
+    }
+
+  script.
+    this.isMe = () => {
+      return this.opts.item.data.user.id === firebase.auth().getUid();
+    };

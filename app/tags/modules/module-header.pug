@@ -1,8 +1,8 @@
 module-header
-  div.bg-main.h44.white
+  div.bg-white.h44.box-shadow.relative
     div.container.s-full.f.fh.relative
-      div.bold.fs24
-        a(href='/') { opts.title || 'Spalate' }
+      div.bold.fs16
+        a.block(href='/') { opts.title || 'chat' }
       div.absolute.t0.l0.h-full.f.fh.px10.cursor-pointer(if='{opts.back}', onclick='spat.nav.back();')
         i.icon-arrow_left.fs28
 

@@ -19,8 +19,8 @@
     "test": ""
   },
   "config": {
-    "stg": "spalate-chat_stg",
-    "prod": "spalate-chat_prod"
+    "stg": "chat-rabee-jp",
+    "prod": "chat-rabee-jp"
   },
   "author": "",
   "license": "MIT",
