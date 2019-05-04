@@ -31,20 +31,28 @@ page-groups-single(spat-animation='slide')
       this.update();
     });
 
-    this.send = (e) => {
+    this.send = async (e) => {
       e.preventDefault();
 
-      if (!this.refs.input.value) return ;
+      var value = this.refs.input.value;
+      if (!value) return ;
+
+      this.refs.input.value = '';
 
       var uid = firebase.auth().getUid();
-      this.item.doc.ref.collection('messages').add({
-        body: this.refs.input.value,
+      var messageRef = await this.item.doc.ref.collection('messages').add({
+        body: value,
         user_id: uid,
         user_ref: flarestore.db.collection('users').doc(uid),
         created_at: Date.now(),
       });
 
+      this.item.doc.ref.update({
+        last_message_id: messageRef.id,
+        last_message_ref: messageRef,
+        updated_at: Date.now(),
+      });
+
       //- alert(this.refs.input.value);
 
-      this.refs.input.value = '';
     };

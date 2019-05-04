@@ -4,10 +4,10 @@ item-chat
       div.w128.s-w80.rect
         img.block.s-full.object-fit-cover(src='{opts.item.data.image.url}')
     div.w-full
-      div.f.fm.flex-between
+      div.f.fm.flex-between.mb8
         h3.lh14.line-clamp-1.fs14 {opts.item.data.title}
         time.fs10 {moment(opts.item.data.updated_at).fromNow()}
-      p.line-clamp-3.word-break-all.fs12 {opts.item.body}
+      p.line-clamp-3.word-break-all.fs12.text-gray {opts.item.data.last_message.data.body}
 
   style(type='less').
     :scope {

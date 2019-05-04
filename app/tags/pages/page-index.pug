@@ -18,12 +18,11 @@ page-index
     };
 
     this.on('mount', async () => {
-      this.items = await flarestore.db.collection('groups').orderBy('created_at', 'desc').getWithRelation();
-      this.update();
     });
     
     this.on('show', async () => {
-      console.log('show');
+      this.items = await flarestore.db.collection('groups').orderBy('updated_at', 'desc').getWithRelation();
+      this.update();
 
       //- var base64 = await app.utils.imageToBase64(faker.image.image());
       //- firebase.storage().ref('hoge/foo').child('test').putString(image, 'base64', {contentType:'image/jpg'});
