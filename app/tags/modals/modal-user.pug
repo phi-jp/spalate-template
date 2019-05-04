@@ -23,5 +23,8 @@ modal-user(spat-animation='bottom')
         updated_at: Date.now(),
       });
 
+      await this.user.doc.ref.getWithRelation({cache:false});
+      riot.update();
+
       this.close();
     };
