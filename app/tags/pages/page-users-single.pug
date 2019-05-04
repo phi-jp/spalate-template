@@ -10,7 +10,7 @@ page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
           div.text-center.bold.mb16 {user.data.name || user.data.screen_name}
           p.mb32 {user.data.profile}
           div.f.fh
-            button.button.primary(if='{is_mypage}') プロフィール編集
+            button.button.primary(if='{is_me}', onclick='{editProfile}') プロフィール編集
 
     module-tabbar
 
@@ -25,6 +25,8 @@ page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
   script.
     
     this.on('show', async (e) => {
+      var uid = firebase.auth().getUid();
+
       if (e.opts.id) {
         this.is_mypage = false;
         this.update();
@@ -36,8 +38,11 @@ page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
       else {
         this.is_mypage = true;
         this.update();
-        var uid = firebase.auth().getUid();
         this.user = await flarestore.db.collection('users').doc(uid).getWithRelation();
+      }
+
+      if (this.user.id === uid) {
+        this.is_me = true;
       }
 
       this.update();
@@ -45,3 +50,7 @@ page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
       //- var base64 = await app.utils.imageToBase64(faker.image.image());
       //- firebase.storage().ref('hoge/foo').child('test').putString(image, 'base64', {contentType:'image/jpg'});
     });
+
+    this.editProfile = () => {
+      spat.modal.open('modal-user');
+    };
