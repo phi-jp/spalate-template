@@ -4,7 +4,7 @@ page-index
     div.h-full.overflow-scroll
       div.container
         div.posts
-          div.m8(data-is='item-post', each='{item in posts}', item='{item}')
+          div.m8(data-is='item-chat', each='{item in items}', item='{item}')
     module-tabbar
 
   script.
@@ -17,8 +17,16 @@ page-index
       };
     };
 
-    this.on('mount', () => {
-      console.log('mount');
+    this.on('mount', async () => {
+      var ss = await flarestore.db.collection('groups').get();
+      this.items = ss.docs.map((doc) => {
+        return {
+          doc: doc,
+          id: doc.id,
+          data: doc.data(),
+        }
+      });
+      this.update();
     });
     
     this.on('show', () => {

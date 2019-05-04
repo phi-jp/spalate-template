@@ -1,0 +1,13 @@
+item-chat
+  a.f.bg-white.rounded-3.p8(href='/groups/{opts.item.id}')
+    div.flex-fixed.mr8
+      div.w200.s-w100.rect
+        img.block.s-full.object-fit-cover(src='{opts.item.data.image.url}')
+    div.w-full
+      h3.lh14.line-clamp-1.text-primary {opts.item.data.title}
+      p.line-clamp-3.word-break-all.fs12 {opts.item.body}
+
+  style(type='less').
+    :scope {
+      display: block;
+    }

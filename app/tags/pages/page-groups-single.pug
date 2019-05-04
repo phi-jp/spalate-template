@@ -1,0 +1,63 @@
+page-groups-single(spat-animation='slide')
+  div.flex.flex-column.h-full
+    module-header(back='{true}', title='{item.data.title}')
+    div.h-full.overflow-scroll
+      div.container.p10
+        div.box-shadow.bg-white.p16.rounded-4.mb16(each='{message in messages}') {message.data.body}
+  div.fixed.b0.w-full.bg-white
+    form.container.p8.f(onsubmit='{send}', action='')
+      input.bg-whitesmoke.w-full.p8.rounded-4.fs13(ref='input', placeholder='Aa')
+
+  style(type='less').
+    :scope {
+      display: block;
+    }
+
+  script.
+    this.on('show', async (e) => {
+      var doc = await flarestore.db.collection('groups').doc(e.opts.id).get();
+      this.item = {
+        id: doc.id,
+        doc: doc,
+        data: doc.data(),
+      };
+
+      this.messages = [];
+
+      this.item.doc.ref.collection('messages').onSnapshot(ss => {
+        var messages = ss.docChanges().map(change => {
+          var doc = change.doc;
+          return {
+            id: doc.id,
+            doc: doc,
+            data: doc.data(),
+          };
+        });
+
+        this.messages = this.messages.concat(messages);
+        this.messages.sort((a, b) => {
+          return a.data.created_at - b.data.created_at;
+        });
+        this.update();
+      });
+
+      this.update();
+    });
+
+    this.send = (e) => {
+      e.preventDefault();
+
+      if (!this.refs.input.value) return ;
+
+      var uid = firebase.auth().getUid();
+      this.item.doc.ref.collection('messages').add({
+        body: this.refs.input.value,
+        user_id: uid,
+        user_ref: flarestore.db.collection('users').doc(uid),
+        created_at: Date.now(),
+      });
+
+      //- alert(this.refs.input.value);
+
+      this.refs.input.value = '';
+    };
