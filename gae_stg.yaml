@@ -1,0 +1,7 @@
+service: default
+runtime: nodejs10
+automatic_scaling:
+  min_instances: 1
+  max_instances: 1
+env_variables:
+  NODE_ENV: 'development'
