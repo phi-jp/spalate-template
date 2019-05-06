@@ -25,6 +25,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "spalate": "git://github.com/phi-jp/spalate.git#a83dc1aa65b32bc51733e2127b6927342c251b69"
+    "spalate": "git://github.com/phi-jp/spalate.git#66ff59657fabf39ebb768eeda48c32d66d3cc56d"
   }
 }

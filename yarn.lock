@@ -2354,9 +2354,9 @@ sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.4.tgz#c63ea927c029dd6bd9a2b7fa03b3fec02ad56e9f"
 
-"spalate@git://github.com/phi-jp/spalate.git#a83dc1aa65b32bc51733e2127b6927342c251b69":
-  version "0.2.0"
-  resolved "git://github.com/phi-jp/spalate.git#a83dc1aa65b32bc51733e2127b6927342c251b69"
+"spalate@git://github.com/phi-jp/spalate.git#66ff59657fabf39ebb768eeda48c32d66d3cc56d":
+  version "0.2.1"
+  resolved "git://github.com/phi-jp/spalate.git#66ff59657fabf39ebb768eeda48c32d66d3cc56d"
   dependencies:
     body-parser "^1.18.3"
     buble "^0.19.3"
@@ -2388,15 +2388,15 @@ sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
     routeful "0.0.9"
     sclazy "0.0.2"
     socialink "0.0.2"
-    spat "0.1.4"
+    spat "0.1.6"
     underscore "^1.8.3"
     uuaa "0.1.0"
     vercom "0.0.2"
     xml2js "^0.4.19"
 
-spat@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/spat/-/spat-0.1.4.tgz#da2a73b1f696225f968eabd54903fd8833ae64e8"
+spat@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/spat/-/spat-0.1.6.tgz#ab141f7b9955a6f11ad37ddaacdeb47bb7cd0fcc"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
