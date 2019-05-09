@@ -1,10 +1,11 @@
 page-index
   div.flex.flex-column.h-full
     module-header
-    div.h-full.overflow-scroll
+    div.h-full.overflow-scroll(ref='body')
       div.container
         div.posts
-          div.m16(data-is='item-chat', each='{item in items}', item='{item}')
+          div.m16(data-is='item-chat', each='{item in sclazy.items}', item='{item}')
+          div.text-center.my16(if='{sclazy.isMore()}') loading...
     module-tabbar
 
   script.
@@ -18,10 +19,34 @@ page-index
     };
 
     this.on('mount', async () => {
+      this.sclazy = Sclazy({
+        target: this.refs.body,
+        onload: async () => {
+          var per = 8;
+          
+          var ref = flarestore.db.collection('groups').orderBy('updated_at', 'desc').limit(per);
+          if (this.sclazy.items.length) {
+            var lastItem = this.sclazy.items[this.sclazy.items.length - 1];
+            //- 続きから取得するようにする
+            if (lastItem) {
+              ref = ref.startAfter(lastItem.doc);
+            }
+          }
+          var items = await ref.getWithRelation();
+
+          this.sclazy.addItems(items);
+          this.sclazy.next(items.length !== 0);
+          this.update();
+        },
+        //- スクロールし終わった時
+        onscrollend: () => {
+          this.sclazy.load();
+        },
+      });
     });
     
     this.on('show', async () => {
-      this.items = await flarestore.db.collection('groups').orderBy('updated_at', 'desc').getWithRelation();
+      this.sclazy.reset().load();
       this.update();
 
       //- var base64 = await app.utils.imageToBase64(faker.image.image());
