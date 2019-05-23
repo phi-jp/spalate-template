@@ -47,6 +47,31 @@ p {
   margin: auto;
 }
 
+/*
+ * for ios
+ */
+ .statusbar {
+  display: none;
+}
+.homebar {
+  display: none;
+}
+
+.os-ios.mobile {
+  .statusbar {
+    display: block;
+    height: 21px;/* iOS 10 以下*/
+    height: constant(safe-area-inset-top);/* iOS 11.2未満用 */
+    height: env(safe-area-inset-top);/* iOS 11.2以上用 */
+  }
+
+  .homebar {
+    display: block;
+    height: 0px;/* iOS 10 以下*/
+    height: constant(safe-area-inset-bottom);/* iOS 11.2未満用 */
+    height: env(safe-area-inset-bottom);/* iOS 11.2以上用 */
+  }
+}
 
 // meltline
 
