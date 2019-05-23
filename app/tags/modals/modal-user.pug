@@ -6,6 +6,7 @@ modal-user(spat-animation='bottom')
         img.s128.circle.object-fit-cover.mb16(src='{user.data.image.url}')
         input.border.p8.rounded-4.w-full.mb32(ref='name', placeholder='名前', required)
         button.button.primary 更新
+    div.homebar.bg-white.flex-fixed
   
   script.
     this.on('mount', async () => {
