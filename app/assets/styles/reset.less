@@ -19,3 +19,10 @@
 // input, textarea {
 //   -webkit-user-select: auto;
 // }
+
+// mobile safari で placeholder の位置がずれるのを修正
+input, textarea {
+  &::-webkit-input-placeholder {
+    line-height: normal;
+  }
+}
