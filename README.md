@@ -1,4 +1,1 @@
-# <%= name %>
-
-
-created by \<template commit version\>
+## spalate-template
