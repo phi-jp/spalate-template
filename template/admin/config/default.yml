@@ -43,7 +43,7 @@ spalate:
 client:
   env: default
   head:
-    title: spalate chat
+    title: admin | spalate chat
     description: Hello, spalate!
     type: website
     image: /images/ogp.png

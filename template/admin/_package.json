@@ -9,9 +9,9 @@
     "dev": "spalate build; spalate dev",
 
     "deploy": "npm run build; gcloud app deploy --project $npm_package_config_stg gae_stg.yaml -q",
-    "browse": "gcloud app browse --project $npm_package_config_stg --service default",
+    "browse": "gcloud app browse --project $npm_package_config_stg --service admin",
     "deploy:prod": "npm run build; gcloud app deploy --project $npm_package_config_prod gae_prod.yaml -q",
-    "browse:prod": "gcloud app browse --project $npm_package_config_prod --service default",
+    "browse:prod": "gcloud app browse --project $npm_package_config_prod --service admin",
     
     "iconfont": "spalate iconfont",
     "browse:icon": "open public/fonts/icons/icons-preview.html",
