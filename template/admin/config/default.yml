@@ -1,0 +1,108 @@
+spalate:
+  # ssr: true
+  views:
+    default: app/views/default.pug
+  static:
+    - 'public'
+    - 'app/assets'
+  # フロント/サーバー両方で使うコード
+  modules:
+    target:
+      - router: './app/assets/scripts/router.js'
+      - Routeful: routeful
+      - helmeta
+      - Firerest: firerest
+      - QuerySearch: querysearch
+      - _: underscore
+      - app: 'public/scripts/app.js'
+    output: 'public/scripts/modules.js'
+  riot:
+    target: 'app/tags'
+    output: 'public/scripts/tags.js'
+    options:
+      template: 'pug'
+  style:
+    type: less
+    entry: 'app/assets/styles/main.less'
+    target: 'app/assets/styles/'
+    output: 'public/styles/main.css'
+  iconfont:
+    target: 'public/images/icons'
+    output: 'public/fonts/icons'
+  # logger:
+  #   type: 'dev'
+  plugins:
+    - 'redirect.js'
+  cordova:
+    platforms:
+      - ios
+      - android
+    target: 'test-app'
+    output: 'public/plugins/cordova'
+    
+client:
+  env: default
+  head:
+    title: spalate chat
+    description: Hello, spalate!
+    type: website
+    image: /images/ogp.png
+    favicon: /images/favicon.ico
+    url: https://rabee.jp
+    meta:
+      - { name: viewport, content: "width=device-width,height=device-height,user-scalable=no,initial-scale=1,maximum-scale=1,viewport-fit=cover" }
+      - { name: apple-mobile-web-app-capable, content: "yes" }
+      - { name: apple-mobile-web-app-status-bar-style, content: "default" }
+      - { name: apple-mobile-web-app-title, content: "spalate" }
+    link:
+      - { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
+      - { rel: "stylesheet", href: "/spalate/plugins/meltline.css" }
+      - { rel: "stylesheet", href: "/fonts/icons/icons.css" }
+      - { rel: "stylesheet", href: "/styles/main.css" }
+    script:
+      # jquery
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js' }
+      # moment.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
+      # marked js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.17/marked.js' }
+      # faker.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/locales/ja/faker.ja.js' }
+      # firebase
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-app.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-auth.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-database.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-firestore.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
+      # my plugins
+      - { src: '/spalate/plugins/uuaa.js' }
+      - { src: '/spalate/plugins/socialink.js' }
+      - { src: '/spalate/plugins/sclazy.js' }
+      - { src: '/spalate/plugins/vercom.js' }
+      - { src: '/spalate/plugins/flickable.js' }
+      # node modules
+      - { src: '/scripts/modules.js' }
+      # user
+      - { src: "/scripts/flarestore.js" }
+      - { src: "/scripts/auth.js" }
+      - { src: "/scripts/storage.js" }
+      - { src: "/scripts/tags.js" }
+      - { src: "/scripts/main.js" }
+  firerest:
+    endpoint: https://jsonplaceholder.typicode.com
+    cacheKey: noteput.auth.token
+    tokenKey: X-Noteput-Token
+    debug: true
+  firebase:
+    apiKey: "AIzaSyCiJjzLD4C5ueJ2wP3UVmdTa7BfiqnWu5Q"
+    authDomain: "chat-rabee-jp.firebaseapp.com"
+    databaseURL: "https://chat-rabee-jp.firebaseio.com"
+    projectId: "chat-rabee-jp"
+    storageBucket: "chat-rabee-jp.appspot.com"
+    messagingSenderId: "50741122756"
+  app:
+    ios:
+      version: '2.0.0'
+      url: 'https://google.com'
