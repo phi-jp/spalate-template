@@ -1,0 +1,37 @@
+module-table
+  table
+    tr.bg-white.border-bottom
+      th.text-left.p12(each='{opts.headers}') {label}
+    tr.data.bg-white.cursor-pointer(each="{item, index in opts.items}", onclick='{go}')
+      td.p12(each='{schema in parent.opts.schema.show}', class='{schema.class}')
+        //- schema ... スキーマ定義
+        //- item ... アイテム
+        //- value ... 値(item[key])
+        //- div(data-is='atom-label-{schema.type}', schema='{schema}', index='{index}', _value='{(schema.child_key) ? item.item[schema.key][schema.child_key] : item.item[schema.key]}', _id='{(item[schema.key]["id"]) ? item[schema.key]["id"] : ""}')
+        div(data-is='atom-label-{schema.type}', schema='{schema}', index='{index}', item='{dataTransfer.input(item, schema)}', _id='{dataTransfer.id(item, schema)}', _value='{dataTransfer.value(item, schema)}')
+
+  style(type='less').
+    :scope {
+      display: block;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        .data {
+          &:hover {
+            background-color: hsl(0, 0%, 90%) !important;
+          }
+        }
+      }
+    }
+  
+  script.
+    this.on('update', () => {
+      
+    });
+
+    this.go = (e) => {
+      var id = dataTransfer.id(e.item.item);
+      app.routeful.go('/' + opts.schema.collection + '/' + id);
+    };

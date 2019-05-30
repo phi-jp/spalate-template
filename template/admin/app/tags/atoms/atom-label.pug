@@ -1,0 +1,55 @@
+atom-label-index
+  div.text-cneter {opts.index}
+
+atom-label-id
+  div.text-cneter {opts._id}
+
+atom-label-label
+  div.text-cneter {opts._value}
+
+atom-label-text
+  div.lh12.max-w200(if='{opts.item.line_clamp_rows}' class='{getLineClampClass()}') {opts._value}
+  div.word-break-keep.lh15(if='{!opts.item.line_clamp_rows}') {opts._value}
+
+  style(type='less').
+    :scope {
+      .max-w200 {
+        max-width: 200px;
+      }
+    }
+  
+  script.
+    this.on('mount', (e) => {
+      console.log(this.opts._value);
+    });
+    this.getLineClampClass = () => {
+      return (this.opts.item.line_clamp_rows == 1) ? 'ellipsis' : 'line-clamp-' + this.opts.item.line_clamp_rows;
+    }
+
+atom-label-author
+  div {opts._value.nickname || 'ゲストさん'}
+
+atom-label-date
+  div {moment(opts._value).format('YYYY/MM/DD HH:mm')}
+
+atom-label-image.s50
+  img.s-full.object-fit-cover(class='{circle: opts.item.shape === "circle"}' src='{opts._value.url}')
+
+atom-label-object
+  div {opts._value[opts.item.use_key]}
+
+atom-label-age
+  div(if='{opts._value}') {moment().diff(moment(opts._value), 'year')}
+
+atom-label-select
+  div(each='{option in opts.item.options}', if='{option.value === opts._value}') {option.label}
+
+atom-label-link
+  div
+    a.text-decoration-underline.hover-text-link(href='/{opts.item.path}/{opts._id}', onclick='{go}') {opts._value}
+  script.
+    this.go = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      app.routeful.go(e.currentTarget.href);
+    };

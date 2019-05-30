@@ -89,6 +89,7 @@ client:
       - { src: "/scripts/auth.js" }
       - { src: "/scripts/storage.js" }
       - { src: "/scripts/tags.js" }
+      - { src: "/scripts/schemas.js" }
       - { src: "/scripts/main.js" }
   firerest:
     endpoint: https://jsonplaceholder.typicode.com
