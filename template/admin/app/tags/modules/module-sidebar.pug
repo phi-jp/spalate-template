@@ -1,0 +1,27 @@
+module-sidebar
+  div.f.flex-column.flex-between.h-full
+    div
+      a.block.border-bottom.px16.py13.word-break-keep(each='{menus}', href='{link}') {label}
+    div
+      div.px16.py24.border-top.cursor-pointer(onclick='{logout}') ログアウト
+      
+  script.
+    // schemas からサイドメニューを作成
+    this.on('mount', () => {
+      this.menus = Object.keys(window.schemas).map((key) => {
+        var schema = window.schemas[key];
+        return {
+          label: schema.label,
+          link: '/' + schema.collection,
+        };
+      });
+
+      this.update();
+    });
+
+    this.logout = () => {
+      spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
+        app.auth.logout();
+        location.reload();
+      });
+    };

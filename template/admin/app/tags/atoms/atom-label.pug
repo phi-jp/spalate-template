@@ -20,7 +20,7 @@ atom-label-text
   
   script.
     this.on('mount', (e) => {
-      console.log(this.opts._value);
+      //- console.log(this.opts._value);
     });
     this.getLineClampClass = () => {
       return (this.opts.item.line_clamp_rows == 1) ? 'ellipsis' : 'line-clamp-' + this.opts.item.line_clamp_rows;
