@@ -7,16 +7,6 @@ page-index
     }
 
   script.
-    this.fetch = async ({app}) => {
-      console.log('fetch');
-      if (this.posts) return {};
-      
-      var posts = await app.ref.child('posts').get();
-      return {
-        posts: posts.splice(0, 10),
-      };
-    };
-
     this.on('mount', () => {
       console.log('mount');
     });

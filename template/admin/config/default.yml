@@ -55,6 +55,7 @@ client:
       - { name: apple-mobile-web-app-status-bar-style, content: "default" }
       - { name: apple-mobile-web-app-title, content: "spalate" }
     link:
+      - { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Noto+Sans+JP" }
       - { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
       - { rel: "stylesheet", href: "/spalate/plugins/meltline.css" }
       - { rel: "stylesheet", href: "/fonts/icons/icons.css" }
@@ -92,9 +93,9 @@ client:
       - { src: "/scripts/schemas.js" }
       - { src: "/scripts/main.js" }
   firerest:
-    endpoint: https://jsonplaceholder.typicode.com
-    cacheKey: noteput.auth.token
-    tokenKey: X-Noteput-Token
+    endpoint: https://admin-dot-static-mile-236001.appspot.com/v1
+    cacheKey: cardmaster.auth.token
+    tokenKey: Authorization
     debug: true
   firebase:
     apiKey: "AIzaSyCiJjzLD4C5ueJ2wP3UVmdTa7BfiqnWu5Q"

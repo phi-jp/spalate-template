@@ -24,6 +24,8 @@ page-list
     });
     
     this.on('show', function(e) {
+      riot.update();
+      
       if (!(e.cached && e.back)) {
         this.schema = schemas[e.opts.page];
         this.page = 1;
