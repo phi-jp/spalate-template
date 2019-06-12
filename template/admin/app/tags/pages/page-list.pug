@@ -61,7 +61,7 @@ page-list
       return query;
     };
 
-    this._fetch = function() {
+    this._fetch = async () => {
       var query = this._normalizeQuery(this.refs.query.value);
 
       var params = {
@@ -71,6 +71,13 @@ page-list
 
       if (query.text) params.keyword = query.text;
       _.extend(params, query);
+
+      var items = await dataTransfer.list(this.schema, params);
+
+      this.items = items;
+      this.update();
+
+      return ;
 
       // 取得
       var ref = flarestore.db.collection(this.schema.collection);
