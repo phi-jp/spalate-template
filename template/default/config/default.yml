@@ -76,6 +76,9 @@ client:
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-database.js' }
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-firestore.js' }
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
+      # polyfill
+      - { src: https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver }
+      
       # my plugins
       - { src: '/spalate/plugins/uuaa.js' }
       - { src: '/spalate/plugins/socialink.js' }
