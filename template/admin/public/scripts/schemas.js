@@ -33,11 +33,14 @@
       show: [
         // { label: 'index', type: 'index', class: 'col1', class: 'w64' },
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'name',  type: 'label', key: 'name', class: 'col3' },
-        { label: 'text',  type: 'text', key: 'text' },
+        { label: '商品名',  type: 'label', key: 'name', class: '' },
+        { label: 'シリーズ',  type: 'label', key: 'series.name', class: 'w100' },
+        { label: 'シリアル',  type: 'label', key: 'serial_id', class: 'w100' },
+        { label: 'レアリティ',  type: 'label', key: 'rarity.name', class: 'w100' },
+        // { label: 'テキスト',  type: 'text', key: 'text' },
       ],
       edit: [
-        { key: 'name', label: '成分名', type: 'text', input_type: 'text' },
+        { key: 'name', label: '成分名', type: 'text', input_type: 'text', class: 'col4' },
         { key: 'description', label: '詳細', type: 'multitext' },
         { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
         { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
@@ -69,7 +72,7 @@
       return item.id;
     },
     value: (item, schema) => {
-      return item[schema.key];
+      return item.$get(schema.key);
     },
     input: (item, schema) => {
       return item;

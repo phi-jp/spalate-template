@@ -33,3 +33,11 @@ app.utils = {
 
   },
 };
+
+Object.defineProperty(Object.prototype, '$get', {  
+  value: function(key) {
+    return key.split('.').reduce(function(t, v) {
+      return t && t[v];
+    }, this);
+  },
+});
