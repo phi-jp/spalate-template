@@ -1,12 +1,37 @@
-    
 /*
  *
  */
 
-
 ;(function(global) {
 
-  global.schemas = {
+  global.admin = {};
+
+  global.admin.menus = [
+    {
+      label: 'カードマスタ',
+      items: [
+        {
+          label: 'カード一覧',
+          link: '/cards',
+        },
+        {
+          label: '属性一覧',
+          link: '/attributes',
+        },
+      ]
+    },
+    {
+      label: 'その他',
+      items: [
+        {
+          label: '管理者',
+          link: '/users',
+        },
+      ]
+    },
+  ];
+
+  global.admin.schemas = {
     users: {
       label: 'ユーザー',
       collection: 'users',
@@ -67,7 +92,7 @@
     },
   };
 
-  global.dataTransfer = {
+  global.admin.method = {
     id: (item) => {
       return item.id;
     },
@@ -88,30 +113,5 @@
       return res.data[key];
     },
   };
-
-  global.menus = [
-    {
-      label: 'カードマスタ',
-      items: [
-        {
-          label: 'カード一覧',
-          link: '/cards',
-        },
-        {
-          label: '属性一覧',
-          link: '/attributes',
-        },
-      ]
-    },
-    {
-      label: 'その他',
-      items: [
-        {
-          label: '管理者',
-          link: '/users',
-        },
-      ]
-    },
-  ];
 
 })(this);
