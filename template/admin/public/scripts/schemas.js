@@ -10,12 +10,12 @@
     users: {
       label: 'ユーザー',
       collection: 'users',
+      api: 'users',
 
       show: [
-        { label: 'index', type: 'index', class: 'col1' },
-        { label: 'id',    type: 'id', class: 'col1' },
-        { label: 'name',  type: 'label', key: 'screen_name', class: 'col2' },
-        { label: 'profile',  type: 'text', key: 'profile' },
+        { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
+        { label: '名前',  type: 'label', key: 'name', class: '' },
+        { label: 'email',  type: 'label', key: 'email', class: '' },
       ],
       edit: [
         { key: 'name', label: '成分名', type: 'text', input_type: 'text' },
