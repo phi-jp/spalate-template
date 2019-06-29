@@ -36,6 +36,7 @@
       label: 'ユーザー',
       collection: 'users',
       api: 'users',
+      singular: 'user',
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
@@ -54,6 +55,7 @@
       label: 'カード',
       collection: 'cards',
       api: 'ygo/cards',
+      singular: 'card',
 
       show: [
         // { label: 'index', type: 'index', class: 'col1', class: 'w64' },
@@ -65,17 +67,22 @@
         // { label: 'テキスト',  type: 'text', key: 'text' },
       ],
       edit: [
-        { key: 'name', label: '成分名', type: 'text', input_type: 'text', class: 'col4' },
-        { key: 'description', label: '詳細', type: 'multitext' },
-        { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
-        { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
-        { key: 'memo', label: '備考', type: 'multitext' },
+        { label: '商品名',  type: 'text', key: 'name', class: 'col12' },
+        { label: 'テキスト',  type: 'text', key: 'text', class: 'col12' },
+        { label: '検索テキスト',  type: 'text', key: 'search_text', class: 'col12' },
+        // { key: 'name', label: '成分名', type: 'text', input_type: 'text', class: 'col4' },
+        // { key: 'description', label: '詳細', type: 'multitext' },
+        // { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
+        // { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
+        // { key: 'memo', label: '備考', type: 'multitext' },
       ],
+      image: '/images/dummies/card.jpg',
     },
     attributes: {
       label: '属性',
-      collection: 'cards',
+      collection: 'attributes',
       api: 'ygo/attributes',
+      singular: 'attribute',
 
       show: [
         // { label: 'index', type: 'index', class: 'col1', class: 'w64' },
@@ -103,6 +110,13 @@
       return item;
     },
 
+    // api
+    get: async (schema, params) => {
+      var ref = app.ref.child(schema.api).child(params.id);
+      var res = await ref.get();
+
+      return res.data[schema.singular];
+    },
     list: async (schema, params) => {
       var ref = app.ref.child(schema.api);
       var res = await ref.get();
