@@ -1,7 +1,7 @@
 module-sidebar
   div.f.flex-column.flex-between.h-full.bg-deepblue.text-white
     div
-      div.f.fh.py50
+      a.f.fh.py50(href='/')
         span.fs27.bold.text-main admin
       div.px36.mb40(each='{menu in admin.menus}')
         div.fs18.bold.mb24 {menu.label}
@@ -12,14 +12,12 @@ module-sidebar
     //-   div.px16.py24.border-top.cursor-pointer(onclick='{logout}') ログアウト
       
   script.
-    // schemas からサイドメニューを作成
     this.on('mount', () => {
-      this.update();
     });
 
-    this.logout = () => {
-      spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
-        app.auth.logout();
-        location.reload();
-      });
-    };
+    //- this.logout = () => {
+    //-   spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
+    //-     app.auth.logout();
+    //-     location.reload();
+    //-   });
+    //- };

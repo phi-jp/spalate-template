@@ -2,13 +2,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   firebase.initializeApp(config.firebase);
   flarestore.init();
 
-  var user = await auth.init();
+  spalate.start(false).then(() => {
+    if (!app.ref.auth.isLogin()) {
+      app.routeful.go('/auth');
+    }
+    app.routeful.start(true);
+  });
 
-  if (!user) {
-    auth.signInAnonymously();
-  }
-
-  spalate.start();
+  spat.nav.on('swap', (e) => {
+    riot.update();
+  });
 });
 
 app.utils = {
