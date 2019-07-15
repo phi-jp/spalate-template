@@ -70,7 +70,7 @@
         { label: '商品名',  type: 'text', key: 'name', class: 'col12' },
         { label: 'テキスト',  type: 'text', key: 'text', class: 'col12' },
         { label: '検索テキスト',  type: 'text', key: 'search_text', class: 'col12' },
-        { label: 'カード画像', type: 'image', key: 'card_images', align: 'right' },
+        { label: 'カード画像', type: 'image', key: 'card_images', class: 'col12', align: 'right' },
         // { key: 'name', label: '成分名', type: 'text', input_type: 'text', class: 'col4' },
         // { key: 'description', label: '詳細', type: 'multitext' },
         // { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },

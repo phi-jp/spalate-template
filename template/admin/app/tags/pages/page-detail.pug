@@ -12,7 +12,7 @@ page-detail
           div.row
             div(each='{option in getOptions("left")}', class='{option.class}')
               div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}')
-        div.col4.flex-fixed(if='{schema.image}')
+        div.col4.flex-fixed
           div.row
             div(each='{option in getOptions("right")}', class='{option.class}')
               div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}')

@@ -1,4 +1,4 @@
-service: admin
+service: default
 runtime: nodejs10
 automatic_scaling:
   min_instances: 1
