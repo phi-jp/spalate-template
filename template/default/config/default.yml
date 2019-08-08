@@ -62,9 +62,9 @@ client:
       # jquery
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js' }
       # moment.js
-      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js' }
-      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js' }
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ja.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
       # marked js
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.17/marked.js' }
       # faker.js
