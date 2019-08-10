@@ -24,8 +24,10 @@ page-list
     });
     
     this.on('show', function(e) {
+      riot.update();
+      
       if (!(e.cached && e.back)) {
-        this.schema = schemas[e.opts.page];
+        this.schema = admin.schemas[e.opts.page];
         this.page = 1;
       }
 
@@ -59,7 +61,7 @@ page-list
       return query;
     };
 
-    this._fetch = function() {
+    this._fetch = async () => {
       var query = this._normalizeQuery(this.refs.query.value);
 
       var params = {
@@ -69,6 +71,13 @@ page-list
 
       if (query.text) params.keyword = query.text;
       _.extend(params, query);
+
+      var items = await admin.method.list(this.schema, params);
+
+      this.items = items;
+      this.update();
+
+      return ;
 
       // 取得
       var ref = flarestore.db.collection(this.schema.collection);

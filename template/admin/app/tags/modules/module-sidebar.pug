@@ -1,27 +1,23 @@
 module-sidebar
-  div.f.flex-column.flex-between.h-full
+  div.f.flex-column.flex-between.h-full.bg-deepblue.text-white
     div
-      a.block.border-bottom.px16.py13.word-break-keep(each='{menus}', href='{link}') {label}
-    div
-      div.px16.py24.border-top.cursor-pointer(onclick='{logout}') ログアウト
+      a.f.fh.py50(href='/')
+        span.fs27.bold.text-main admin
+      div.px36.mb40(each='{menu in admin.menus}')
+        div.fs18.bold.mb24 {menu.label}
+        div.pl16
+          a.block.px24.py15.mb16(each='{item in menu.items}', href='{item.link}', class='{"mrn36 bg-main rounded-tl-full rounded-bl-full": location.pathname === item.link}')
+            span {item.label}
+    //- div
+    //-   div.px16.py24.border-top.cursor-pointer(onclick='{logout}') ログアウト
       
   script.
-    // schemas からサイドメニューを作成
     this.on('mount', () => {
-      this.menus = Object.keys(window.schemas).map((key) => {
-        var schema = window.schemas[key];
-        return {
-          label: schema.label,
-          link: '/' + schema.collection,
-        };
-      });
-
-      this.update();
     });
 
-    this.logout = () => {
-      spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
-        app.auth.logout();
-        location.reload();
-      });
-    };
+    //- this.logout = () => {
+    //-   spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
+    //-     app.auth.logout();
+    //-     location.reload();
+    //-   });
+    //- };

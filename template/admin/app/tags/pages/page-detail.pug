@@ -1,0 +1,47 @@
+page-detail
+  form(onsubmit='{submit}')
+    div.mb20
+      div.bg-white.h50.border-bottom.f.fm.flex-between.px30
+        a.cursor-pointer(onclick='spat.nav.back()') < 戻る
+        div(if='{schema.editable !== false}')
+          button.button.danger.mr8(type='button', onclick='{del}', if='{location.pathname !== "/me"}') 削除する
+          button.button(type='submit') 保存する
+    div.p30
+      div.f.bg-white.p32
+        div.w-full
+          div.row
+            div(each='{option in getOptions("left")}', class='{option.class}')
+              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}')
+        div.col4.flex-fixed
+          div.row
+            div(each='{option in getOptions("right")}', class='{option.class}')
+              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}')
+
+  style(scoped, type='less').
+    :scope {
+      input, textarea {
+        background-color: #F5F7FA !important;
+      }
+    }
+
+  script.
+    this.on('show', async (e) => {
+      this.schema = admin.schemas[e.opts.page];
+
+      this.item = await admin.method.get(this.schema, {
+        id: e.opts.id,
+      });
+
+      this.update();
+    });
+
+    this.submit = (e) => {
+      e.preventDefault();
+    };
+
+    this.getOptions = (align) => {
+      return this.schema.edit.filter((option) => {
+        var option_align = option.align || 'left';
+        return option_align === align;
+      });
+    };
