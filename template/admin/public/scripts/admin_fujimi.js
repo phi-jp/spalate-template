@@ -11,12 +11,20 @@
       label: '共通',
       items: [
         {
-          label: 'ユーザー一覧',
-          link: '/users',
+          label: '成分',
+          link: '/ingredients',
         },
         {
-          label: 'グループ一覧',
-          link: '/groups',
+          label: 'サプリメント',
+          link: '/supplements',
+        },
+        {
+          label: '診断',
+          link: '/diagnosis',
+        },
+        {
+          label: 'プロダクト',
+          link: '/products',
         },
       ]
     },
@@ -32,34 +40,66 @@
   ];
 
   global.admin.schemas = {
-    users: {
-      label: 'ユーザー',
-      collection: 'users',
+    // 成分
+    ingredients: {
+      label: '成分',
+      collection: 'ingredients',
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: '名前',  type: 'label', key: 'screen_name', class: '' },
+        { label: '名前',  type: 'text', key: 'data.name', class: '' },
+        { label: '詳細',  type: 'text', key: 'data.description', class: '' },
       ],
       edit: [
-        { key: 'name', label: '成分名', type: 'text', input_type: 'text' },
-        { key: 'description', label: '詳細', type: 'multitext' },
-        { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
-        { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
-        { key: 'memo', label: '備考', type: 'multitext' },
+        { label: '名前',  type: 'text', key: 'data.name', class: 'col12' },
+        { label: '詳細',  type: 'multitext', key: 'data.description', class: 'col12' },
+        { label: '原材料名',  type: 'text', key: 'data.material', class: 'col8' },
+        { label: '成分量',  type: 'text', key: 'data.amount', class: 'col4' },
+        { label: '備考',  type: 'multitext', key: 'data.memo', class: 'col12' },
       ],
     },
-    groups: {
-      label: 'グループ',
-      collection: 'groups',
+    // サプリメント
+    supplements: {
+      label: 'サプリメント',
+      collection: 'supplements',
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'タイトル',  type: 'label', key: 'data.title', class: '' },
-        { label: 'メッセージ',  type: 'label', key: 'data.last_message.data.body', class: '' },
+        { label: '名前',  type: 'text', key: 'data.name', class: '' },
+        { label: '詳細',  type: 'text', key: 'data.description', class: '' },
       ],
       edit: [
+        { label: '名前',  type: 'text', key: 'data.name', class: 'col12' },
+      ],
+    },
+    // 診断
+    diagnosis: {
+      label: '診断',
+      collection: 'diagnosis',
+      order: 'index',
+
+      show: [
+        { label: 'インデックス', type: 'text', key: 'data.index', class: 'w128' },
+        { label: '質問',  type: 'text', key: 'data.question', class: '' },
+        { label: 'タイプ',  type: 'text', key: 'data.type', class: '' },
+        { label: 'アニメーション',  type: 'text', key: 'data.animation', class: '' },
+      ],
+      edit: [
+        { label: '名前',  type: 'text', key: 'data.name', class: 'col12' },
+      ],
+    },
+    // プロダクト
+    products: {
+      label: 'プロダクト',
+      collection: 'products',
+
+      show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+        { label: 'コード',  type: 'text', key: 'data.code', class: '' },
+        { label: '詳細',  type: 'text', key: 'data.description1', class: '' },
+      ],
+      edit: [
+        { label: '名前',  type: 'text', key: 'data.name', class: 'col12' },
       ],
     },
   };
@@ -78,6 +118,9 @@
     // 一覧取得
     list: async (schema, params) => {
       var ref = flarestore.db.collection(schema.collection);
+      if (schema.order) {
+        ref = ref.orderBy(schema.order);
+      }
       var res = await ref.getWithRelation();
 
       return res;

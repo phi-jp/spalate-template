@@ -10,5 +10,17 @@ atom-input-text
       return this.refs.v.value;
     };
 
+atom-input-multitext
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    textarea.input.w-full.mb8(ref='v', rows='8') {opts._value}
+    //- div.f.fm.fs10.text-weak
+    //-   span 文字数：
+    //-   span {getWordCount()}
+  script.
+    this.getValue = () => {
+      return this.refs.v.value;
+    };
+
 atom-input-image
   img(src='/images/dummies/card.jpg')
