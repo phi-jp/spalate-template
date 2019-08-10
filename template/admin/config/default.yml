@@ -93,9 +93,9 @@ client:
       - { src: "/scripts/admin.js" }
       - { src: "/scripts/main.js" }
   firerest:
-    endpoint: https://admin-dot-static-mile-236001.appspot.com/v1
-    cacheKey: cardmaster.auth.token
-    tokenKey: Authorization
+    endpoint: https://jsonplaceholder.typicode.com
+    cacheKey: noteput.auth.token
+    tokenKey: X-Noteput-Token
     debug: true
   firebase:
     apiKey: "AIzaSyCiJjzLD4C5ueJ2wP3UVmdTa7BfiqnWu5Q"

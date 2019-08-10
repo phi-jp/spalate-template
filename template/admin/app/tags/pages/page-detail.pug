@@ -35,8 +35,23 @@ page-detail
       this.update();
     });
 
-    this.submit = (e) => {
+    this.submit = async (e) => {
       e.preventDefault();
+
+      var item = {};
+
+      this.schema.edit.forEach(option => {
+        var ref = this.refs[option.key];
+        if (!ref) return ;
+
+        item.$set(option.key, ref.getValue());
+      });
+
+      admin.method.set(this.schema, {
+        id: this.item.id,
+      }, item);
+
+      spat.toast.message('saved');
     };
 
     this.getOptions = (align) => {

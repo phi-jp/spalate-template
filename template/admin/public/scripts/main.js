@@ -44,3 +44,17 @@ Object.defineProperty(Object.prototype, '$get', {
     }, this);
   },
 });
+
+Object.defineProperty(Object.prototype, '$set', {  
+  value: function(key, value) {
+    key.split('.').reduce(function(t, v, i, arr) {
+      if (i === (arr.length-1)) {
+        t[v] = value;
+      }
+      else {
+        if (!t[v]) t[v] = {};
+        return t[v];
+      }
+    }, this);
+  },
+});
