@@ -1,0 +1,118 @@
+page-list
+  div.p30
+    div.f.flex-between.mb10
+      h2.fs18 {schema.label}一覧
+      div(if='{schema.editable !== false}')
+        a.button(href='{schema.collection}/new') 新規作成
+    form.f.fr.mb18(onsubmit='{search}')
+      input.input.mr4(ref='query', type='search', placeholder='キーワードを入力')
+      button.button 検索
+    div
+      div.f.fr.mb8
+        module-pagination(page_info='{page_info}')
+      module-table.mb8(schema='{schema}', headers='{schema.show}', items='{items}')
+      div.f.fr
+        module-pagination(page_info='{page_info}')
+
+  style(scoped, type='less').
+    :scope {
+      display: block;
+    }
+
+  script.
+    this.on('mount', function() {
+    });
+    
+    this.on('show', function(e) {
+      riot.update();
+      
+      if (!(e.cached && e.back)) {
+        this.schema = admin.schemas[e.opts.page];
+        this.page = 1;
+      }
+
+      if (e.query.q) {
+        this.refs.query.value = decodeURIComponent(e.query.q);
+      }
+      else {
+        this.refs.query.value = '';
+      }
+      
+      this._fetch();
+    });
+
+    this._normalizeQuery = (q) => {
+      var query = {};
+      var temp = QuerySearch.parse(q);
+
+      if (temp.text) {
+        query.keyword = temp.text;
+      }
+
+      if (temp.options) {
+        for (var key in temp.options) {
+          if (key === "start_at" || key === "end_at") {
+            temp.options[key] = moment(temp.options[key], "YYYY-MM-DD").format("YYYY-MM-DD");
+          }
+          query[key] = temp.options[key];
+        }
+      }
+
+      return query;
+    };
+
+    this._fetch = async () => {
+      var query = this._normalizeQuery(this.refs.query.value);
+
+      var params = {
+        per: 16,
+        page: this.page,
+      };
+
+      if (query.text) params.keyword = query.text;
+      _.extend(params, query);
+
+      var items = await admin.method.list(this.schema, params);
+
+      this.items = items;
+      this.update();
+
+      return ;
+
+      // 取得
+      var ref = flarestore.db.collection(this.schema.collection);
+
+      if (this.schema.order) {
+        ref = ref.orderBy(this.schema.order);
+      }
+
+      ref.get().then(snapshot => {
+        this.items = [];
+        snapshot.forEach(doc => {
+          this.items.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        this.update();
+        console.log(this.items);
+
+        //- // url を書き換えておく
+        //- if (self.refs.query.value) {
+        //-   history.replaceState(null, null, '?q=' + self.refs.query.value);
+        //- }
+      });
+    };
+
+    this.create = function(e) {
+      var data = {};
+      data[this.schema.key] = this.schema.defaults;
+      app.ref.child(this.schema.api).post(data).then(function() {
+        debugger;
+      });
+    };
+
+    this.search = function(e) {
+      e.preventDefault();
+      this.fetch();
+    };

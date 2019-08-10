@@ -1,0 +1,23 @@
+module-sidebar
+  div.f.flex-column.flex-between.h-full.bg-deepblue.text-white
+    div
+      a.f.fh.py50(href='/')
+        span.fs27.bold.text-main admin
+      div.px36.mb40(each='{menu in admin.menus}')
+        div.fs18.bold.mb24 {menu.label}
+        div.pl16
+          a.block.px24.py15.mb16(each='{item in menu.items}', href='{item.link}', class='{"mrn36 bg-main rounded-tl-full rounded-bl-full": location.pathname === item.link}')
+            span {item.label}
+    //- div
+    //-   div.px16.py24.border-top.cursor-pointer(onclick='{logout}') ログアウト
+      
+  script.
+    this.on('mount', () => {
+    });
+
+    //- this.logout = () => {
+    //-   spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
+    //-     app.auth.logout();
+    //-     location.reload();
+    //-   });
+    //- };

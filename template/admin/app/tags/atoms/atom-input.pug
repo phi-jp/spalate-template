@@ -1,0 +1,14 @@
+atom-input-text
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    input.input.w-full(ref='v', type='{opts.item.input_type || "text"}', placeholder='{opts.item.placeholder}', value='{opts._value}', required='{opts.item.required}', readonly='{opts.item.readonly}')
+
+  script.
+    this.on('mount', () => {
+    });
+    this.getValue = () => {
+      return this.refs.v.value;
+    };
+
+atom-input-image
+  img(src='/images/dummies/card.jpg')

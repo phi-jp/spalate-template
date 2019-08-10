@@ -1,0 +1,38 @@
+page-auth
+  div.s-full.f.fh
+    form.bg-white.box-shadow.p64.rounded-4(submit='{signIn}')
+      h2.text-center.mb32 Auth
+      div.mb40
+        input.block.w300.p10.border.rounded-2.mb16(ref='email', type='email', placeholder='email', required)
+        input.block.w300.p10.border.rounded-2(ref='password', type='password', placeholder='password', required)
+      div.f.fh
+        button.button.primary ログイン
+
+  style(type='less').
+    :scope {
+      display: block;
+    }
+
+  script.
+    this.on('mount', () => {
+      this.refs.email.value = "sugimoto.yuusuke@rabee.jp";
+      this.refs.password.value = "hogehoge";
+    });
+    
+    this.on('show', function() {
+      console.log('show');
+    });
+
+    this.signIn = async (e) => {
+      e.preventDefault();
+
+      var {data} = await app.ref.child('me/sign_in').post({
+        email: this.refs.email.value,
+        password: this.refs.password.value,
+      });
+
+      spat.modal.alert('ログインに成功しました!');
+
+      app.ref.auth.login(data.token, data.user);
+      app.routeful.go('/');
+    };
