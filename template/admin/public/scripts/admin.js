@@ -38,14 +38,11 @@
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: '名前',  type: 'label', key: 'screen_name', class: '' },
+        { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
       edit: [
-        { key: 'name', label: '成分名', type: 'text', input_type: 'text' },
-        { key: 'description', label: '詳細', type: 'multitext' },
-        { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
-        { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
-        { key: 'memo', label: '備考', type: 'multitext' },
+        { label: '名前', type: 'text', key: 'data.screen_name', input_type: 'text' },
+        { label: 'アイコン画像', type: 'image', key: 'icon_image' },
       ],
     },
     groups: {
@@ -93,6 +90,16 @@
     set: async (schema, params, item) => {
       var ref = flarestore.db.collection(schema.collection).doc(params.id);
       await ref.update(item.data);
+    },
+
+    // アップロード
+    upload: async (file) => {
+      var pathes = file.name.split('.');
+      var ext = pathes[pathes.length-1];
+      var ref = firebase.storage().ref();
+      var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
+      var url = await snapshot.ref.getDownloadURL();
+      return url;
     },
   };
 

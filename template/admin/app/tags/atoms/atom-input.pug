@@ -23,4 +23,37 @@ atom-input-multitext
     };
 
 atom-input-image
-  img(src='/images/dummies/card.jpg')
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    div(onclick='{click}')
+      img(src='{url}')
+  
+  script.
+    this.on('mount', () => {
+      this.url = opts._value || 'https://dummyimage.com/600x400/000/fff';
+      this.update();
+
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.setAttribute('accept', 'image/*');
+      input.onchange = (e) => {
+        var f = e.target.files[0];
+        if (!f) return ;
+        this.upload(f);
+      };
+
+      this.imageInput = input;
+    });
+
+    this.click = () => {
+      this.imageInput.click();
+    };
+
+    this.upload = async (file) => {
+      this.url = await admin.method.upload(file);
+      this.update();
+    };
+
+    this.getValue = () => {
+      return this.url;
+    };
