@@ -9,7 +9,7 @@ atom-label-label
 
 atom-label-text
   div.lh12.max-w200(if='{opts.item.line_clamp_rows}' class='{getLineClampClass()}') {opts._value}
-  div.word-break-keep.lh15(if='{!opts.item.line_clamp_rows}') {opts._value}
+  div.word-break-keep.lh15.line-clamp-3(if='{!opts.item.line_clamp_rows}') {opts._value}
 
   style(type='less').
     :scope {

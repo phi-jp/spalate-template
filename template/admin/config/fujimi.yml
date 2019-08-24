@@ -1,0 +1,44 @@
+client:
+  env: fujimi
+
+  head:
+    script:
+      # jquery
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js' }
+      # moment.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js' }
+      # marked js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.17/marked.js' }
+      # faker.js
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js' }
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/locales/ja/faker.ja.js' }
+      # firebase
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-app.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-auth.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-database.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-firestore.js' }
+      - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
+      # my plugins
+      - { src: '/spalate/plugins/uuaa.js' }
+      - { src: '/spalate/plugins/socialink.js' }
+      - { src: '/spalate/plugins/sclazy.js' }
+      - { src: '/spalate/plugins/vercom.js' }
+      - { src: '/spalate/plugins/flickable.js' }
+      # node modules
+      - { src: '/scripts/modules.js' }
+      # user
+      - { src: "/scripts/flarestore.js" }
+      - { src: "/scripts/auth.js" }
+      - { src: "/scripts/storage.js" }
+      - { src: "/scripts/tags.js" }
+      - { src: "/scripts/admin_fujimi.js" }
+      - { src: "/scripts/main.js" }
+
+  firebase:
+    apiKey: "AIzaSyCfnd30v3kbY_yB2CQMJ68Pr4yGvgYK--Q"
+    authDomain: "fujimi-tricot-inc-com.firebaseapp.com"
+    databaseURL: "https://fujimi-tricot-inc-com.firebaseio.com"
+    projectId: "fujimi-tricot-inc-com"
+    storageBucket: "fujimi-tricot-inc-com.appspot.com"
+    messagingSenderId: "364670655879"

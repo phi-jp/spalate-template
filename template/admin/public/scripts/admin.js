@@ -92,7 +92,7 @@
     // 更新
     set: async (schema, params, item) => {
       var ref = flarestore.db.collection(schema.collection).doc(params.id);
-      await ref.set(item.data);
+      await ref.update(item.data);
     },
   };
 
