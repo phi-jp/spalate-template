@@ -6,7 +6,7 @@ page-detail
         div(if='{schema.editable !== false}')
           button.button.danger.mr8(type='button', onclick='{del}', if='{location.pathname !== "/me"}') 削除する
           button.button(type='submit') 保存する
-    div.p30
+    div.p30(if='{item}')
       div.f.bg-white.p32
         div.w-full
           div.row

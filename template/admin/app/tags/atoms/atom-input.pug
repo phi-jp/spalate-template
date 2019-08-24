@@ -30,7 +30,7 @@ atom-input-image
   
   script.
     this.on('mount', () => {
-      this.url = opts._value || 'https://dummyimage.com/600x400/000/fff';
+      this.url = this.opts._value || 'https://dummyimage.com/600x400/000/fff';
       this.update();
 
       var input = document.createElement('input');
