@@ -42,7 +42,7 @@
       ],
       edit: [
         { label: '名前', type: 'text', key: 'data.screen_name', input_type: 'text' },
-        { label: 'アイコン画像', type: 'image', key: 'icon_image' },
+        { label: 'アイコン画像', type: 'image', key: 'data.icon_image' },
       ],
     },
     groups: {
