@@ -62,14 +62,41 @@
   };
 
   global.admin.method = {
+    // データ本体
+    item: (item, schema) => {
+      return item;
+    },
+    // id
     id: (item) => {
       return item.id;
     },
-    value: (item, schema) => {
-      return item.$get(schema.key);
+    // 対応する key の値
+    value: (item, option) => {
+      var value = item.$get(option.key);
+
+      // 画像のときの対応
+      if (option.type === 'image') {
+        return value.url;
+      }
+      else {
+        return value;
+      }
     },
-    input: (item, schema) => {
-      return item;
+    // アップロードするときの変換
+    output: async (value, option) => {
+      // 画像のときの対応
+      if (option.type === 'image') {
+        var url = value;
+        // base 64 だったら upload しておく
+        if (/^data:/.test(value)) {
+          url = await admin.utils.uploadBase64(value);
+        }
+        
+        return { url };
+      }
+      else {
+        return value;
+      }
     },
 
     // 一覧取得
@@ -92,6 +119,9 @@
       await ref.update(item.data);
     },
 
+  };
+
+  global.admin.utils = {
     // アップロード
     upload: async (file) => {
       var pathes = file.name.split('.');
@@ -99,6 +129,22 @@
       var ref = firebase.storage().ref();
       var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
       var url = await snapshot.ref.getDownloadURL();
+      return url;
+    },
+    // アップロード
+    uploadBase64: async (base64) => {
+      var schema = base64.split(';')[0];
+      var mime_type = schema.split(':')[1];
+      var ext = {
+        'image/png': 'png',
+        'image/jpeg': 'jpg',
+      }[mime_type] || 'png';
+
+      var ref = firebase.storage().ref();
+      var ref = ref.child('temp').child(`${Date.now()}.${ext}`);
+      var snapshot = await ref.putString(base64, 'data_url');
+      var url = await snapshot.ref.getDownloadURL();
+
       return url;
     },
   };

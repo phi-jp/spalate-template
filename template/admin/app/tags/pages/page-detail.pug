@@ -40,12 +40,16 @@ page-detail
 
       var item = {};
 
-      this.schema.edit.forEach(option => {
+      var promises = this.schema.edit.map(async (option) => {
         var ref = this.refs[option.key];
         if (!ref) return ;
 
-        item.$set(option.key, ref.getValue());
+        var value = await admin.method.output(ref.getValue(), option)
+
+        item.$set(option.key, value);
       });
+
+      await Promise.all(promises);
 
       admin.method.set(this.schema, {
         id: this.item.id,

@@ -36,10 +36,13 @@ atom-input-image
       var input = document.createElement('input');
       input.type = 'file';
       input.setAttribute('accept', 'image/*');
-      input.onchange = (e) => {
+      input.onchange = async (e) => {
         var f = e.target.files[0];
         if (!f) return ;
-        this.upload(f);
+
+        var base64 = await this.fileToBase64(f);
+        this.url = base64;
+        this.update();
       };
 
       this.imageInput = input;
@@ -56,4 +59,15 @@ atom-input-image
 
     this.getValue = () => {
       return this.url;
+    };
+
+    this.fileToBase64 = (file) => {
+      return new Promise((resolve) => {
+        var fr = new FileReader();
+        fr.onload = (e) => {
+          resolve(e.target.result);
+        };
+
+        fr.readAsDataURL(file);
+      })
     };
