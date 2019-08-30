@@ -1,3 +1,4 @@
+// テキスト
 atom-input-text
   label
     div.fs12.text-gray.mb8 {opts.option.label}
@@ -10,6 +11,20 @@ atom-input-text
       return this.refs.v.value;
     };
 
+// 数字
+atom-input-number
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    input.input.w-full(ref='v', type='number', placeholder='{opts.item.placeholder}', value='{opts._value}', required='{opts.item.required}', readonly='{opts.item.readonly}')
+
+  script.
+    this.on('mount', () => {
+    });
+    this.getValue = () => {
+      return this.refs.v.value;
+    };
+
+// 複数行テキスト
 atom-input-multitext
   label
     div.fs12.text-gray.mb8 {opts.option.label}
@@ -20,6 +35,19 @@ atom-input-multitext
   script.
     this.getValue = () => {
       return this.refs.v.value;
+    };
+
+// セレクトメニュー
+atom-input-select
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    select.select.border.w-full(ref='select')
+      option(each='{option in opts.option.options}', value='{option.value}', selected='{option.value === parent.opts._value}') {option.label}
+  script.
+    this.on('mount', () => {
+    });
+    this.getValue = () => {
+      return this.refs.select.value;
     };
 
 atom-input-image
