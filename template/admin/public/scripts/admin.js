@@ -41,9 +41,33 @@
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
       edit: [
-        { label: '名前', type: 'text', key: 'data.screen_name', input_type: 'text' },
-        { label: 'アイコン画像', type: 'image', key: 'data.icon_image' },
-      ],
+        {
+          class: 'col8',
+          items: [
+            { label: '名前', type: 'text', key: 'data.screen_name', class: 'col12' },
+            { label: 'プロフィール', type: 'multitext', key: 'data.description', class: 'col12' },
+            { label: '年齢', type: 'number', key: 'data.age', class: 'col6' },
+            {
+              label: '血液型',
+              type: 'select',
+              key: 'data.blood_type',
+              class: 'col6',
+              options: [
+                { label: 'A', value: 'A' },
+                { label: 'B', value: 'B' },
+                { label: 'O', value: 'O' },
+                { label: 'AB', value: 'AB' },
+              ]
+            },
+          ]
+        },
+        {
+          class: 'col4',
+          items: [
+            { label: 'アイコン画像', type: 'image', key: 'data.icon_image', class: 'col12' },
+          ]
+        },
+      ]
     },
     groups: {
       label: 'グループ',
@@ -55,8 +79,12 @@
         { label: 'メッセージ',  type: 'label', key: 'data.last_message.data.body', class: '' },
       ],
       edit: [
-        { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+        {
+          items: [
+            { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
+            { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+          ]
+        }
       ],
     },
   };
