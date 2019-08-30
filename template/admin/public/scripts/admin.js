@@ -81,8 +81,8 @@
       edit: [
         {
           items: [
-            { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
             { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+            { label: '所属ユーザー',  type: 'select-collection', key: 'data.users', class: 'col12', multiple: true, },
           ]
         }
       ],

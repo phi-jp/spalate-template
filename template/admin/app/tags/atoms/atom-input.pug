@@ -99,3 +99,39 @@ atom-input-image
         fr.readAsDataURL(file);
       })
     };
+
+
+atom-input-select-collection
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    div.f.fm.row
+      div.fs12.border.rounded-4.p8.mr4.mb4(each='{item in items}') {item.data.name}
+      button.button(onclick='{edit}') 編集
+  script.
+    this.on('mount', async () => {
+      this.schema = admin.schemas[opts.option.options.collection];
+      this.getItems();
+    });
+
+    this.getItems = async () => {
+      //- await admin.method.list(schema);
+
+      var promises = this.opts._value.map(id => {
+        return admin.method.get(this.schema, {
+          id: id,
+        });
+      });
+
+      this.items = await Promise.all(promises);
+      this.update();
+    };
+
+    this.edit = (e) => {
+      e.preventDefault();
+
+      var modal = spat.modal.open('modal-select-collection', {
+        label: '選択',
+        schema: this.schema,
+        items: this.items
+      });
+    };
