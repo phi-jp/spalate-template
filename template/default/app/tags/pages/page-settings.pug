@@ -3,7 +3,7 @@ page-settings
     module-header
     div.h-full.overflow-scroll
       div.container.my16
-        a.f.bg-white.p16.mb1(each='{item in items}', href='{item.link}', target='_blank')
+        a.f.bg-white.p16.mb1(each='{item in items}', href='{item.link}', onclick='{item.onclick}' , target='_blank')
           div {item.label}
     module-tabbar
 
@@ -13,6 +13,8 @@ page-settings
       { label: 'ログイン・登録' },
       { label: 'Spalate を応援する', link: 'https://github.com/phi-jp/spalate/' },
       { label: '不具合を報告する', link: 'https://github.com/phi-jp/spalate/issues' },
+      { label: 'ログアウト', link: '/', onclick: (e) => this.logout(e) },
+      { label: 'リロード', link: '/', onclick: (e) => this.reload(e) },
       { label: '利用規約' },
     ];
 
@@ -22,6 +24,14 @@ page-settings
     this.on('show', function() {
     });
 
-    this.onclick = () => {
-      alert();
+    this.logout = (e) => {
+      e.preventDefault();
+      app.ref.auth.logout();
+      location.reload();
     };
+
+    this.reload = (e) => {
+      e.preventDefault();
+      location.reload();
+    };
+
