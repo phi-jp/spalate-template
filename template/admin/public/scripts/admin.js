@@ -177,4 +177,19 @@
     },
   };
 
+  global.admin.auth = {
+    signIn: async ({email, password}) => {
+      var {user} = await firebase.auth().signInWithEmailAndPassword(email, password);
+      var token = await user.getIdToken();
+      app.ref.auth.login(`Bearer ${token}`, user);
+    },
+    signOut: () => {
+      app.ref.auth.logout();
+      firebase.auth().signOut()
+    },
+    isSignIn: () => {
+      return app.ref.auth.isLogin();
+    },
+  };
+
 })(this);
