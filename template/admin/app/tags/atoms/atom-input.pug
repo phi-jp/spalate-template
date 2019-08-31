@@ -111,12 +111,9 @@ atom-input-select-collection
     this.on('mount', async () => {
       this.schema = admin.schemas[opts.option.options.collection];
       await this.syncItems();
-
-      this.edit();
     });
 
     this.syncItems = async () => {
-      //- await admin.method.list(schema);
       if (!this.opts._value) {
         this.items = [];
         return ;
