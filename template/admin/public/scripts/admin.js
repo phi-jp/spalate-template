@@ -90,7 +90,7 @@
               multiple: true,
               options: {
                 collection: 'users',
-                key: 'name',
+                key: 'data.name',
               },
             },
           ]

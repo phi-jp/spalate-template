@@ -1,8 +1,36 @@
 modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
-  div.modal.rounded-4(ref='modal')
-    div.header.px16.py12.w100per.border-bottom
-      div.fs16.bold {opts.title || 'Message'}
-    div.main.p16
-      div.fs14.white-space-pre-wrap {opts.text}
-    div.footer.f.fr.p16
-      button.button.primary.px30.rounded-2.fs16(ref="autofocus", onclick="{close}") OK
+  div.modal.rounded-4.w50vw.h50vh.bg-white(ref='modal')
+    div.f.flex-column.h-full
+      div.h-full.overflow-scroll
+        label.block.p4(each='{item in items}')
+          input.mr4(type='checkbox', checked='{item.selected}', onchange='{change}')
+          span {item.item.$get('data.name') || item.item.id}
+      button(onclick='{submit}') 決定
+
+  style(scoped, type='less').
+    :scope {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  
+  script.
+    this.on('mount', async () => {
+      var items = await admin.method.list(this.opts.schema);
+      
+      this.items = items.map((item) => {
+        var selected = !!this.opts.items.find(temp => temp.id === item.id);
+        return { item, selected };
+      });
+      this.update();
+    });
+
+    this.change = (e) => {
+      e.item.item.selected = e.target.checked;
+    };
+
+    this.submit = () => {
+      var items = this.items.filter(item => item.selected).map(item => item.item);
+      this.trigger('submit', {
+        items: items
+      });
+      this.close();
+    };

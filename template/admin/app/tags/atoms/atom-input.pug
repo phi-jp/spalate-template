@@ -105,12 +105,14 @@ atom-input-select-collection
   label
     div.fs12.text-gray.mb8 {opts.option.label}
     div.f.fm.row
-      div.fs12.border.rounded-4.p8.mr4.mb4(each='{item in items}') {item.data.name}
+      div.fs12.border.rounded-4.p8.mr4.mb4(each='{item in items}') {item.$get(parent.opts.option.options.key)}
       button.button(onclick='{edit}') 編集
   script.
     this.on('mount', async () => {
       this.schema = admin.schemas[opts.option.options.collection];
-      this.syncItems();
+      await this.syncItems();
+
+      this.edit();
     });
 
     this.syncItems = async () => {
@@ -131,11 +133,21 @@ atom-input-select-collection
     };
 
     this.edit = (e) => {
-      e.preventDefault();
+      if (e) e.preventDefault();
 
       var modal = spat.modal.open('modal-select-collection', {
         label: '選択',
         schema: this.schema,
+        key: opts.option.options,
         items: this.items
       });
+
+      modal.on('submit', ({items}) => {
+        this.items = items;
+        this.update();
+      });
+    };
+
+    this.getValue = () => {
+      return this.items.map(i => i.id);
     };
