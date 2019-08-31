@@ -82,7 +82,17 @@
         {
           items: [
             { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
-            { label: '所属ユーザー',  type: 'select-collection', key: 'data.users', class: 'col12', multiple: true, },
+            {
+              label: '所属ユーザー', 
+              type: 'select-collection',
+              key: 'data.users',
+              class: 'col12',
+              multiple: true,
+              options: {
+                collection: 'users',
+                key: 'name',
+              },
+            },
           ]
         }
       ],

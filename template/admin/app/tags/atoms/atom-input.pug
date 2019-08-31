@@ -110,18 +110,22 @@ atom-input-select-collection
   script.
     this.on('mount', async () => {
       this.schema = admin.schemas[opts.option.options.collection];
-      this.getItems();
+      this.syncItems();
     });
 
-    this.getItems = async () => {
+    this.syncItems = async () => {
       //- await admin.method.list(schema);
+      if (!this.opts._value) {
+        this.items = [];
+        return ;
+      }
 
+      // id からデータ化
       var promises = this.opts._value.map(id => {
         return admin.method.get(this.schema, {
           id: id,
         });
       });
-
       this.items = await Promise.all(promises);
       this.update();
     };
