@@ -71,3 +71,71 @@ atom-input-image
         fr.readAsDataURL(file);
       })
     };
+
+atom-input-multiform
+  div.fs12.text-gray.mb8 {opts.option.label}
+  div
+    div.f.fm.mb8.cursor-pointer(each='{item, index in items}', onclick='{editItem}')
+      div.mr4 {index}. 
+      div.border.p8
+        p(each='{value, key in item}') 
+          span {key}: {value}
+          br
+    div(onclick='{createItem}')
+      button.button.primary(type='button') 追加
+
+  script.
+    var self = this;
+
+    this.on('mount', () => {
+      this.key = opts.option.key;
+      this.items = opts._value || [];
+      this.update();
+    });
+
+    this.createItem = (e) => {
+      // モーダルを開く
+      var modal = spat.modal.open('modal-edit', {
+        label: self.opts.option.label, // ラベル
+        forms: self.opts.option.forms, // 生成したいフォームを渡す（schemaと同じ）
+        readonly: self.opts.option.readonly,
+      });
+
+      modal.on('submit', (e) => {
+        var item = e.item;
+        this.items.push(item);
+
+        this.update();
+      });
+    };
+
+    this.editItem = (e) => {
+      var item = e.item.item;
+      var index = e.item.index;
+      var item_id = this.items[index].id;
+
+      // モーダルを作成
+      var modal = spat.modal.open('modal-edit', {
+        label: self.opts.option.label, // ラベル
+        forms: self.opts.option.forms, // 生成したいフォームを渡す（schemaと同じ）
+        item: item, // 編集したい場合は ここにメニューを渡す
+      });
+
+      // 更新
+      modal.on('submit', (event) => {
+        var item = event.item;
+        this.items[index] = item;
+
+        this.update();
+      });
+      
+      // 削除
+      modal.on('del', (event) => {
+        this.items.splice(index, 1);
+        this.update();
+      });
+    };
+
+    this.getValue = () => {
+      return this.items || null;
+    };

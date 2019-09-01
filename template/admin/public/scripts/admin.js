@@ -56,7 +56,16 @@
       ],
       edit: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+        { label: 'タイトル', type: 'text', key: 'data.title', class: 'col12' },
+        {
+          key: 'data.options',
+          label: 'オプション',
+          type: 'multiform',
+          forms: [
+            { key: 'option1', label: 'オプション1', type: 'text' },
+            { key: 'option2', label: 'オプション2', type: 'text' },
+          ],
+        },
       ],
     },
   };
