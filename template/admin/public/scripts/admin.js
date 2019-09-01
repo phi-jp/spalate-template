@@ -124,8 +124,8 @@
   global.admin.utils = {
     // アップロード
     upload: async (file) => {
-      var pathes = file.name.split('.');
-      var ext = pathes[pathes.length-1];
+      var paths = file.name.split('.');
+      var ext = paths[paths.length-1];
       var ref = firebase.storage().ref();
       var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
       var url = await snapshot.ref.getDownloadURL();

@@ -121,8 +121,8 @@
       var ref = app.ref.child(schema.api);
       var res = await ref.get();
 
-      var pathes = ref.api.split('/');
-      var key = pathes[pathes.length-1];
+      var paths = ref.api.split('/');
+      var key = paths[paths.length-1];
 
       return res.data[key];
     },
