@@ -6,7 +6,7 @@ page-detail
         div(if='{schema.editable !== false}')
           button.button.danger.mr8(type='button', onclick='{del}', if='{location.pathname !== "/me"}') 削除する
           button.button(type='submit') 保存する
-    div.p30
+    div.p30(if='{item}')
       div.f.bg-white.p32
         div.w-full
           div.row
@@ -40,12 +40,16 @@ page-detail
 
       var item = {};
 
-      this.schema.edit.forEach(option => {
+      var promises = this.schema.edit.map(async (option) => {
         var ref = this.refs[option.key];
         if (!ref) return ;
 
-        item.$set(option.key, ref.getValue());
+        var value = await admin.method.output(ref.getValue(), option)
+
+        item.$set(option.key, value);
       });
+
+      await Promise.all(promises);
 
       admin.method.set(this.schema, {
         id: this.item.id,

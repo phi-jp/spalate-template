@@ -38,14 +38,11 @@
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: '名前',  type: 'label', key: 'screen_name', class: '' },
+        { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
       edit: [
-        { key: 'name', label: '成分名', type: 'text', input_type: 'text' },
-        { key: 'description', label: '詳細', type: 'multitext' },
-        { key: 'amount', label: '成分量', type: 'text', input_type: 'text' },
-        { key: 'material', label: '原料名', type: 'text', input_type: 'text' },
-        { key: 'memo', label: '備考', type: 'multitext' },
+        { label: '名前', type: 'text', key: 'data.screen_name', input_type: 'text' },
+        { label: 'アイコン画像', type: 'image', key: 'data.icon_image' },
       ],
     },
     groups: {
@@ -65,14 +62,41 @@
   };
 
   global.admin.method = {
+    // データ本体
+    item: (item, schema) => {
+      return item;
+    },
+    // id
     id: (item) => {
       return item.id;
     },
-    value: (item, schema) => {
-      return item.$get(schema.key);
+    // 対応する key の値
+    value: (item, option) => {
+      var value = item.$get(option.key);
+
+      // 画像のときの対応
+      if (option.type === 'image') {
+        return value.url;
+      }
+      else {
+        return value;
+      }
     },
-    input: (item, schema) => {
-      return item;
+    // アップロードするときの変換
+    output: async (value, option) => {
+      // 画像のときの対応
+      if (option.type === 'image') {
+        var url = value;
+        // base 64 だったら upload しておく
+        if (/^data:/.test(value)) {
+          url = await admin.utils.uploadBase64(value);
+        }
+        
+        return { url };
+      }
+      else {
+        return value;
+      }
     },
 
     // 一覧取得
@@ -93,6 +117,35 @@
     set: async (schema, params, item) => {
       var ref = flarestore.db.collection(schema.collection).doc(params.id);
       await ref.update(item.data);
+    },
+
+  };
+
+  global.admin.utils = {
+    // アップロード
+    upload: async (file) => {
+      var pathes = file.name.split('.');
+      var ext = pathes[pathes.length-1];
+      var ref = firebase.storage().ref();
+      var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
+      var url = await snapshot.ref.getDownloadURL();
+      return url;
+    },
+    // アップロード
+    uploadBase64: async (base64) => {
+      var schema = base64.split(';')[0];
+      var mime_type = schema.split(':')[1];
+      var ext = {
+        'image/png': 'png',
+        'image/jpeg': 'jpg',
+      }[mime_type] || 'png';
+
+      var ref = firebase.storage().ref();
+      var ref = ref.child('temp').child(`${Date.now()}.${ext}`);
+      var snapshot = await ref.putString(base64, 'data_url');
+      var url = await snapshot.ref.getDownloadURL();
+
+      return url;
     },
   };
 

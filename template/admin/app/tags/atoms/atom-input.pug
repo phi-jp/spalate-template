@@ -23,4 +23,51 @@ atom-input-multitext
     };
 
 atom-input-image
-  img(src='/images/dummies/card.jpg')
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    div(onclick='{click}')
+      img(src='{url}')
+  
+  script.
+    this.on('mount', () => {
+      this.url = this.opts._value || 'https://dummyimage.com/600x400/000/fff';
+      this.update();
+
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.setAttribute('accept', 'image/*');
+      input.onchange = async (e) => {
+        var f = e.target.files[0];
+        if (!f) return ;
+
+        var base64 = await this.fileToBase64(f);
+        this.url = base64;
+        this.update();
+      };
+
+      this.imageInput = input;
+    });
+
+    this.click = () => {
+      this.imageInput.click();
+    };
+
+    this.upload = async (file) => {
+      this.url = await admin.method.upload(file);
+      this.update();
+    };
+
+    this.getValue = () => {
+      return this.url;
+    };
+
+    this.fileToBase64 = (file) => {
+      return new Promise((resolve) => {
+        var fr = new FileReader();
+        fr.onload = (e) => {
+          resolve(e.target.result);
+        };
+
+        fr.readAsDataURL(file);
+      })
+    };
