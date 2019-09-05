@@ -5,7 +5,7 @@ page-list
       div(if='{schema.editable !== false}')
         a.button(href='{schema.collection}/new') 新規作成
     form.f.fr.mb18(onsubmit='{search}')
-      input.input.mr4(ref='query', type='search', placeholder='キーワードを入力')
+      input.input.mr4(ref='query', type='search', oninput='{search}' ,placeholder='キーワードを入力')
       button.button 検索
     div
       div.f.fr.mb8
@@ -114,5 +114,5 @@ page-list
 
     this.search = function(e) {
       e.preventDefault();
-      this.fetch();
+      this._fetch();
     };
