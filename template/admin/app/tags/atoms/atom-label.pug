@@ -33,7 +33,7 @@ atom-label-date
   div {moment(opts._value).format('YYYY/MM/DD HH:mm')}
 
 atom-label-image.s50
-  img.s-full.object-fit-cover(class='{circle: opts.item.shape === "circle"}' src='{opts._value.url}')
+  img.s-full.object-fit-cover(class='{circle: opts.schema.shape === "circle"}' src='{opts._value}')
 
 atom-label-object
   div {opts._value[opts.item.use_key]}
