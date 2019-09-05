@@ -35,7 +35,7 @@
     users: {
       label: 'ユーザー',
       collection: 'users',
-
+      search_column: 'screen_name',
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
@@ -140,8 +140,14 @@
     // 一覧取得
     list: async (schema, params) => {
       var ref = flarestore.db.collection(schema.collection);
-      var res = await ref.getWithRelation();
 
+      // params にキーワードがある場合は疑似 like 検索でヒットするものだけ取ってくるようにする
+      var keyword = params.keyword;
+      if (keyword && schema.search_column) {
+        ref = ref.orderBy(schema.search_column).startAt(keyword).endAt(keyword+'\uf8ff');
+      }
+
+      var res = await ref.getWithRelation();
       return res;
     },
     // 単体取得
