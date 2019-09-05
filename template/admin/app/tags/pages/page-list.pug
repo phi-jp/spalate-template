@@ -10,11 +10,12 @@ page-list
     form.f.flex-between.fm.mb18(onsubmit='{search}')
       div.f.fm
         label.block.mr12.relative.border-grayDF.border.rounded-full.w300
-          input.input.px14.py12.border-none.w-full(ref='query', type='search', placeholder='キーワードを入力')
+          input.input.px14.py12.border-none.w-full(ref='query', type='search', oninput='{search}', placeholder='キーワードを入力')
           div.icon-search.text-deepblue.fs24.absolute.r16.t8
         button.button 検索
       div(if='{schema.editable !== false}')
         a.button.primary.shadow(href='{schema.collection}/new') + 新規作成
+
     div
       div.f.fr.mb8
         module-pagination(page_info='{page_info}')
@@ -122,7 +123,7 @@ page-list
 
     this.search = function(e) {
       e.preventDefault();
-      this.fetch();
+      this._fetch();
     };
 
     this.logout = () => {

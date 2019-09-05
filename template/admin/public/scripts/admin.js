@@ -35,7 +35,7 @@
     users: {
       label: 'ユーザー',
       collection: 'users',
-
+      search_column: 'screen_name',
       show: [
         { label: 'アイコン', key: 'data.icon_image', type: 'image', shape: 'circle', },
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
@@ -141,8 +141,14 @@
     // 一覧取得
     list: async (schema, params) => {
       var ref = flarestore.db.collection(schema.collection);
-      var res = await ref.getWithRelation();
 
+      // params にキーワードがある場合は疑似 like 検索でヒットするものだけ取ってくるようにする
+      var keyword = params.keyword;
+      if (keyword && schema.search_column) {
+        ref = ref.orderBy(schema.search_column).startAt(keyword).endAt(keyword+'\uf8ff');
+      }
+
+      var res = await ref.getWithRelation();
       return res;
     },
     // 単体取得
