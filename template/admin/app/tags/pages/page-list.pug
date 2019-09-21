@@ -127,5 +127,8 @@ page-list
     };
 
     this.logout = () => {
-      //- TODO:
+      spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
+        admin.auth.signOut();
+        setTimeout(() => location.reload(), 256);
+      });
     };
