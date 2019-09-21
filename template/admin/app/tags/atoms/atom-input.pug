@@ -120,7 +120,11 @@ atom-input-select-collection
       }
 
       // id からデータ化
-      var promises = this.opts._value.map(id => {
+      var value = this.opts._value;
+      if (!Array.isArray(value)) {
+        value = [value];
+      }
+      var promises = value.map(id => {
         return admin.method.get(this.schema, {
           id: id,
         });
@@ -136,7 +140,8 @@ atom-input-select-collection
         label: '選択',
         schema: this.schema,
         key: opts.option.options,
-        items: this.items
+        multiple: opts.option.multiple,
+        items: this.items,
       });
 
       modal.on('submit', ({items}) => {
@@ -146,5 +151,10 @@ atom-input-select-collection
     };
 
     this.getValue = () => {
-      return this.items.map(i => i.id);
+      if (this.opts.option.multiple) {
+        return this.items.map(i => i.id);
+      }
+      else {
+        return this.items[0].id;
+      }
     };

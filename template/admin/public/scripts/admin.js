@@ -84,6 +84,16 @@
           items: [
             { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
             {
+              label: 'オーナー', 
+              type: 'select-collection',
+              key: 'data.owner',
+              class: 'col12',
+              options: {
+                collection: 'users',
+                key: 'data.name',
+              },
+            },
+            {
               label: '所属ユーザー', 
               type: 'select-collection',
               key: 'data.users',
