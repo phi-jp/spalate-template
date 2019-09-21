@@ -167,12 +167,22 @@
   };
 
   global.admin.utils = {
+    uuid() {
+      var d = Date.now();
+      if (window.performance && typeof window.performance.now === "function") {
+        d += performance.now(); //use high-precision timer if available
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    },
     // アップロード
     upload: async (file) => {
       var paths = file.name.split('.');
       var ext = paths[paths.length-1];
       var ref = firebase.storage().ref();
-      var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
+      var snapshot = await ref.child('temp').child(`${admin.utils.uuid()}.${ext}`).put(file);
       var url = await snapshot.ref.getDownloadURL();
       return url;
     },
@@ -186,7 +196,7 @@
       }[mime_type] || 'png';
 
       var ref = firebase.storage().ref();
-      var ref = ref.child('temp').child(`${Date.now()}.${ext}`);
+      var ref = ref.child('temp').child(`${admin.utils.uuid()}.${ext}`);
       var snapshot = await ref.putString(base64, 'data_url');
       var url = await snapshot.ref.getDownloadURL();
 
