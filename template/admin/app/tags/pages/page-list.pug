@@ -129,6 +129,6 @@ page-list
     this.logout = () => {
       spat.modal.confirm('ログアウトしますか？').on('confirm', () => {
         admin.auth.signOut();
-        setTimeout(() => location.reload(), 256);
+        app.routeful.go('/auth', true);
       });
     };
