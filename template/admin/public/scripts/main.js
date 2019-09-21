@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   firebase.initializeApp(config.firebase);
   flarestore.init();
+  await auth.init();
 
   spalate.start(false).then(() => {
     if (!admin.auth.isSignIn()) {
