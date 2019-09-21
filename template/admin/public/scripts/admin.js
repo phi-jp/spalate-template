@@ -37,6 +37,7 @@
       collection: 'users',
       search_column: 'screen_name',
       show: [
+        { label: 'アイコン', key: 'data.icon_image', type: 'image', shape: 'circle', },
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],

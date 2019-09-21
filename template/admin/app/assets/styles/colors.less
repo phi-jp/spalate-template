@@ -50,3 +50,10 @@
 .define-color(deepblue, #36364F) !important;
 
 .define-color(halfblack, rgba(0, 0, 0, 0.5)) !important;
+
+// gray
+each(
+DF
+, {
+  .define-color(~"gray@{value}", ~"#@{value}@{value}@{value}" ) !important;
+});

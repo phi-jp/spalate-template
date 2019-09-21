@@ -1,12 +1,21 @@
 page-list
-  div.p30
-    div.f.flex-between.mb10
-      h2.fs18 {schema.label}一覧
+  div.px60.py32
+    div.f.fb.flex-between.mb10.border-bottom.border-grayDF.pb12.mb24 
+      h2.fs14 {schema.label}一覧
+      div.f.fm
+        div.bg-grayC4.circle.flex-fixed.s36.mr16.bg-grayDF
+        div.fs12.bold.mr24 {app.ref.auth.user.displayName || '管理者'}
+        div.h40.w1.flex-fixed.bg-grayDF.mr24
+        div.text-weak.cursor-pointer.fs12.bold(onclick='{logout}') ログアウト
+    form.f.flex-between.fm.mb18(onsubmit='{search}')
+      div.f.fm
+        label.block.mr12.relative.border-grayDF.border.rounded-full.w300
+          input.input.px14.py12.border-none.w-full(ref='query', type='search', oninput='{search}', placeholder='キーワードを入力')
+          div.icon-search.text-deepblue.fs24.absolute.r16.t8
+        button.button 検索
       div(if='{schema.editable !== false}')
-        a.button(href='{schema.collection}/new') 新規作成
-    form.f.fr.mb18(onsubmit='{search}')
-      input.input.mr4(ref='query', type='search', oninput='{search}' ,placeholder='キーワードを入力')
-      button.button 検索
+        a.button.primary.shadow(href='{schema.collection}/new') + 新規作成
+
     div
       div.f.fr.mb8
         module-pagination(page_info='{page_info}')
@@ -115,4 +124,8 @@ page-list
     this.search = function(e) {
       e.preventDefault();
       this._fetch();
+    };
+
+    this.logout = () => {
+      //- TODO:
     };

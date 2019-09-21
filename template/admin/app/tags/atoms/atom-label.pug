@@ -1,11 +1,11 @@
 atom-label-index
-  div.text-cneter {opts.index}
+  div {opts.index}
 
 atom-label-id
-  div.text-cneter {opts._id}
+  div {opts._id}
 
 atom-label-label
-  div.text-cneter {opts._value}
+  div {opts._value}
 
 atom-label-text
   div.lh12.max-w200(if='{opts.item.line_clamp_rows}' class='{getLineClampClass()}') {opts._value}
@@ -33,7 +33,7 @@ atom-label-date
   div {moment(opts._value).format('YYYY/MM/DD HH:mm')}
 
 atom-label-image.s50
-  img.s-full.object-fit-cover(class='{circle: opts.item.shape === "circle"}' src='{opts._value.url}')
+  img.s-full.object-fit-cover(class='{circle: opts.schema.shape === "circle"}' src='{opts._value}')
 
 atom-label-object
   div {opts._value[opts.item.use_key]}
