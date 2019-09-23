@@ -37,7 +37,7 @@
       collection: 'users',
       search_column: 'screen_name',
       show: [
-        { label: 'アイコン', key: 'data.icon_image', type: 'image', shape: 'circle', },
+        { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', },
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
@@ -65,7 +65,7 @@
         {
           class: 'col4',
           items: [
-            { label: 'アイコン画像', type: 'image', key: 'data.icon_image', class: 'col12' },
+            { label: 'アイコン画像', type: 'image', key: 'data.icon_image.url', class: 'col12' },
           ]
         },
       ]
@@ -121,15 +121,7 @@
     },
     // 対応する key の値
     value: (item, option) => {
-      var value = item.$get(option.key);
-
-      // 画像のときの対応
-      if (option.type === 'image') {
-        return value.url;
-      }
-      else {
-        return value;
-      }
+      return item.$get(option.key);
     },
     // アップロードするときの変換
     output: async (value, option) => {
@@ -141,7 +133,7 @@
           url = await admin.utils.uploadBase64(value);
         }
         
-        return { url };
+        return url;
       }
       else {
         return value;
