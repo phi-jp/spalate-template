@@ -73,6 +73,9 @@
     groups: {
       label: 'グループ',
       collection: 'groups',
+      sub_collections: [
+        'messages',
+      ],
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
@@ -90,7 +93,7 @@
               class: 'col12',
               options: {
                 collection: 'users',
-                key: 'data.name',
+                key: 'data.screen_name',
               },
             },
             {
@@ -101,13 +104,63 @@
               multiple: true,
               options: {
                 collection: 'users',
-                key: 'data.name',
+                key: 'data.screen_name',
               },
             },
+            {
+              label: 'メッセージ一覧',
+              type: 'table',
+              key: 'sub_collections.messages',
+              class: 'col12',
+            }
           ]
         }
       ],
     },
+
+    messages: {
+      label: 'メッセージ',
+      collection: 'messages',
+      editable: true,
+      sub_collections: ['replies'],
+      show: [
+        { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
+        { label: '本文', type: 'label', key: 'data.body', class: '' },
+      ],
+      edit: [
+        {
+          class: 'col12',
+          items: [
+            { label: '本文', type: 'multitext', key: 'data.body', class: 'col12' },
+            {
+              label: 'リプライ一覧',
+              type: 'table',
+              key: 'sub_collections.replies',
+              class: 'col12',
+            },
+          ],
+        },
+      ],
+    },
+
+    replies: {
+      label: 'リプライ',
+      collection: 'replies',
+      editable: true,
+
+      show: [
+        { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
+        { label: '本文', type: 'label', key: 'data.body', class: '' },
+      ],
+      edit: [
+        {
+          class: 'col12',
+          items: [
+            { label: '本文', type: 'multitext', key: 'data.body', class: 'col12' },
+          ],
+        },
+      ],
+    }
   };
 
   global.admin.method = {
@@ -141,9 +194,16 @@
     },
 
     // 一覧取得
-    list: async (schema, params) => {
-      var ref = flarestore.db.collection(schema.collection);
-
+    list: async (path, params = {}) => {
+      if (!Array.isArray(path)) {
+        path = [path];
+      }
+      if (params.id && params.sub_collection) {
+        path = path.slice(0);
+        path.push(params.id);
+        path.push(params.sub_collection);
+      }
+      var ref = admin.method.createRef(path);
       // params にキーワードがある場合は疑似 like 検索でヒットするものだけ取ってくるようにする
       var keyword = params.keyword;
       if (keyword && schema.search_column) {
@@ -153,16 +213,33 @@
       var res = await ref.getWithRelation();
       return res;
     },
+    createRef: (path, params) => {
+      if (!Array.isArray(path)) {
+        path = [path];
+      }
+      var ref = path.reduce((ref, key, i) => {
+        if (i % 2 === 0) {
+          return ref.collection(admin.schemas[key].collection);
+        }
+        else {
+          return ref.doc(key);
+        }
+      }, flarestore.db);
+      if (params && params.id) {
+        ref = ref.doc(params.id);
+      }
+      return ref;
+    },
     // 単体取得
-    get: async (schema, params) => {
-      var ref = flarestore.db.collection(schema.collection).doc(params.id);
+    get: async (path, params) => {
+      var ref = admin.method.createRef(path, params);
       var res = await ref.getWithRelation();
 
       return res;
     },
     // 更新
-    set: async (schema, params, item) => {
-      var ref = flarestore.db.collection(schema.collection).doc(params.id);
+    set: async (path, params, item) => {
+      var ref = admin.method.createRef(path, params);
       await ref.update(item.data);
     },
 

@@ -22,12 +22,21 @@ page-detail
 
   script.
     this.on('show', async (e) => {
-      this.schema = admin.schemas[e.opts.page];
-
-      this.item = await admin.method.get(this.schema, {
+      this.path = e.opts.page.split('/');
+      this.schema = admin.schemas[this.path[this.path.length - 1]];
+      this.item = await admin.method.get(this.path, {
         id: e.opts.id,
       });
-
+      //- サブコレクションがある場合は、サブコレクションを生やす
+      if (this.schema.sub_collections) {
+        this.item.sub_collections = {};
+        await Promise.all(this.schema.sub_collections.map(async key => {
+          this.item.sub_collections[key] = await admin.method.list(this.path, {
+            id: e.opts.id,
+            sub_collection: key,
+          });
+        }));
+      }
       this.update();
     });
 
@@ -40,7 +49,7 @@ page-detail
 
       var promises = options.map(async (option) => {
         var ref = this.refs[option.key];
-        if (!ref) return ;
+        if (!ref || !ref.getValue) return ;
 
         var value = await admin.method.output(ref.getValue(), option)
 
@@ -48,8 +57,7 @@ page-detail
       });
 
       await Promise.all(promises);
- 
-      admin.method.set(this.schema, {
+      admin.method.set(this.path, {
         id: this.item.id,
       }, item);
 
