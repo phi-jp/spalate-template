@@ -36,6 +36,7 @@ page-list
       riot.update();
       
       if (!(e.cached && e.back)) {
+        this.schema_key = e.opts.page;
         this.schema = admin.schemas[e.opts.page];
         this.page = 1;
       }
@@ -81,7 +82,7 @@ page-list
       if (query.text) params.keyword = query.text;
       _.extend(params, query);
 
-      var items = await admin.method.list(this.schema, params);
+      var items = await admin.method.list(this.schema_key, params);
 
       this.items = items;
       this.update();

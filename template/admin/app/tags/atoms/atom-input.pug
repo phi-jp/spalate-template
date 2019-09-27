@@ -109,7 +109,6 @@ atom-input-select-collection
       button.button(onclick='{edit}') 編集
   script.
     this.on('mount', async () => {
-      this.schema = admin.schemas[opts.option.options.collection];
       await this.syncItems();
     });
 
@@ -125,7 +124,7 @@ atom-input-select-collection
         value = [value];
       }
       var promises = value.map(id => {
-        return admin.method.get(this.schema, {
+        return admin.method.get(opts.option.options.collection, {
           id: id,
         });
       });
@@ -138,8 +137,8 @@ atom-input-select-collection
 
       var modal = spat.modal.open('modal-select-collection', {
         label: '選択',
-        schema: this.schema,
-        key: opts.option.options,
+        path: opts.option.options.collection,
+        key: opts.option.options.key,
         multiple: opts.option.multiple,
         items: this.items,
       });
@@ -158,3 +157,20 @@ atom-input-select-collection
         return this.items[0].id;
       }
     };
+
+atom-input-table
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+  div.f.flex-right
+    div(if='{opts.item.editable !== false}')
+      a.button(href='/{opts.item.api}/new?id={opts.data.id}') 新規作成
+  div
+    div.f.fr.mb16(if='{schema.editable !== false}')
+      a.button.primary.shadow(href='{location.pathname.replace(/\\/$/g, "")}/{schema.collection}/new') + 新規作成
+    module-table(schema='{schema}', headers='{schema.show}', items='{opts._value}', is_detail='{true}')
+  script.
+
+    this.on('mount', () => {
+      this.schema = admin.schemas[opts.option.key.replace(/.*\./, '')];
+      this.update();
+    });

@@ -6,7 +6,7 @@
     '/auth': {
       tag: 'page-auth',
     },
-    '/:page/:id': {
+    '/:page(.+)/:id': {
       tag: 'page-detail',
     },
     '/:page': {

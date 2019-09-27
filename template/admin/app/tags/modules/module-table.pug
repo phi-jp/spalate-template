@@ -32,5 +32,9 @@ module-table
 
     this.go = (e) => {
       var id = admin.method.id(e.item.item);
-      app.routeful.go('/' + opts.schema.collection + '/' + id);
+      var path = '/' + opts.schema.collection + '/' + id;
+      if (opts.is_detail) {
+        path = location.pathname.replace(/\/$/g, '') + path;
+      }
+      app.routeful.go(path);
     };
