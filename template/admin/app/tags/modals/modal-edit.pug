@@ -1,0 +1,61 @@
+modal-edit.f.fh.s-full
+  div.f.flex-column.flex-between.rounded-2.overflow-hidden.bg-white.modal(ref='modal')
+    div.s-full.overflow-scroll
+      div.bold.fs16.border-bottom.p16.bg-white {opts.label}
+      div.p16
+        div.mb16(each='{item in forms}', ref='{item.key}', data-is='atom-input-{item.type}', option='{item}', _value='{opts.item[item.key]}', data='{opts.item}')
+      
+      div.s-full.p12.f.fm
+        button.button.danger.w-full.py12.fs16.mr4(if='{!opts.readonly && mode==="edit"}', type='button', onclick='{_del}') 削除
+        button.button.primary.w-full.py12.fs16(onclick='{submit}') { mode==='edit' ? '編集' : '作成' }
+
+  style(type='less').
+    :scope {
+      background-color: rgba(0, 0, 0, 0.5);
+      .modal {
+        max-width: 600px;
+        min-width: 300px;
+      }
+    }
+
+  script.
+    var self = this;
+
+    this.on('mount', () => {
+      this.forms = opts.forms;
+      if (opts.item) this.mode = 'edit';
+      this.update();
+    });
+
+    this.submit = (e) => {
+      e.preventDefault();
+      var item = this.formToData();
+
+      this.trigger('submit', {item: item});
+
+      this.close();
+    };
+
+    this.formToData = (type) => {
+      var obj = {};
+      this.forms.forEach(item => {
+        var tag = self.refs[item.key];
+
+        if (!tag) return;
+
+        var key = (tag.getKey) ? tag.getKey() : item.key;
+
+        if (tag.getValue) {
+          obj[key] = tag.getValue();
+        }
+      });
+
+      return obj;
+    };
+
+    this._del = () => {
+      spat.modal.confirm('削除しますか？').on('confirm', () => {
+        this.trigger('del');
+        this.close();
+      });
+    };

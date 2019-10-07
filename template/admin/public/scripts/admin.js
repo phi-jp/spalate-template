@@ -108,6 +108,15 @@
               },
             },
             {
+              key: 'data.options',
+              label: 'オプション',
+              type: 'multiform',
+              forms: [
+                { key: 'option1', label: 'オプション1', type: 'text' },
+                { key: 'option2', label: 'オプション2', type: 'text' },
+              ],
+            },
+            {
               label: 'メッセージ一覧',
               type: 'table',
               key: 'sub_collections.messages',
