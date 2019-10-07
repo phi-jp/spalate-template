@@ -35,19 +35,47 @@
     users: {
       label: 'ユーザー',
       collection: 'users',
-
+      search_column: 'screen_name',
       show: [
+        { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', },
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
       edit: [
-        { label: '名前', type: 'text', key: 'data.screen_name', input_type: 'text' },
-        { label: 'アイコン画像', type: 'image', key: 'data.icon_image' },
-      ],
+        {
+          class: 'col8',
+          items: [
+            { label: '名前', type: 'text', key: 'data.screen_name', class: 'col12' },
+            { label: 'プロフィール', type: 'multitext', key: 'data.description', class: 'col12' },
+            { label: '年齢', type: 'number', key: 'data.age', class: 'col6' },
+            {
+              label: '血液型',
+              type: 'select',
+              key: 'data.blood_type',
+              class: 'col6',
+              options: [
+                { label: 'A', value: 'A' },
+                { label: 'B', value: 'B' },
+                { label: 'O', value: 'O' },
+                { label: 'AB', value: 'AB' },
+              ]
+            },
+          ]
+        },
+        {
+          class: 'col4',
+          items: [
+            { label: 'アイコン画像', type: 'image', key: 'data.icon_image.url', class: 'col12' },
+          ]
+        },
+      ]
     },
     groups: {
       label: 'グループ',
       collection: 'groups',
+      sub_collections: [
+        'messages',
+      ],
 
       show: [
         { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
@@ -55,19 +83,93 @@
         { label: 'メッセージ',  type: 'label', key: 'data.last_message.data.body', class: '' },
       ],
       edit: [
-        { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
-        { label: 'タイトル', type: 'text', key: 'data.title', class: 'col12' },
         {
-          key: 'data.options',
-          label: 'オプション',
-          type: 'multiform',
-          forms: [
-            { key: 'option1', label: 'オプション1', type: 'text' },
-            { key: 'option2', label: 'オプション2', type: 'text' },
+          items: [
+            { label: 'タイトル',  type: 'text', key: 'data.title', class: 'col12' },
+            {
+              label: 'オーナー', 
+              type: 'select-collection',
+              key: 'data.owner',
+              class: 'col12',
+              options: {
+                collection: 'users',
+                key: 'data.screen_name',
+              },
+            },
+            {
+              label: '所属ユーザー', 
+              type: 'select-collection',
+              key: 'data.users',
+              class: 'col12',
+              multiple: true,
+              options: {
+                collection: 'users',
+                key: 'data.screen_name',
+              },
+            },
+            {
+              key: 'data.options',
+              label: 'オプション',
+              type: 'multiform',
+              forms: [
+                { key: 'option1', label: 'オプション1', type: 'text' },
+                { key: 'option2', label: 'オプション2', type: 'text' },
+              ],
+            },
+            {
+              label: 'メッセージ一覧',
+              type: 'table',
+              key: 'sub_collections.messages',
+              class: 'col12',
+            }
+          ]
+        }
+      ],
+    },
+
+    messages: {
+      label: 'メッセージ',
+      collection: 'messages',
+      editable: true,
+      sub_collections: ['replies'],
+      show: [
+        { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
+        { label: '本文', type: 'label', key: 'data.body', class: '' },
+      ],
+      edit: [
+        {
+          class: 'col12',
+          items: [
+            { label: '本文', type: 'multitext', key: 'data.body', class: 'col12' },
+            {
+              label: 'リプライ一覧',
+              type: 'table',
+              key: 'sub_collections.replies',
+              class: 'col12',
+            },
           ],
         },
       ],
     },
+
+    replies: {
+      label: 'リプライ',
+      collection: 'replies',
+      editable: true,
+
+      show: [
+        { label: 'ID', type: 'id', class: 'col1', class: 'w64' },
+        { label: '本文', type: 'label', key: 'data.body', class: '' },
+      ],
+      edit: [
+        {
+          class: 'col12',
+          items: [
+            { label: '本文', type: 'multitext', key: 'data.body', class: 'col12' },
+          ],
+        },
+      ],
+    }
   };
 
   global.admin.method = {
@@ -81,15 +183,7 @@
     },
     // 対応する key の値
     value: (item, option) => {
-      var value = item.$get(option.key);
-
-      // 画像のときの対応
-      if (option.type === 'image') {
-        return value.url;
-      }
-      else {
-        return value;
-      }
+      return item.$get(option.key);
     },
     // アップロードするときの変換
     output: async (value, option) => {
@@ -101,7 +195,7 @@
           url = await admin.utils.uploadBase64(value);
         }
         
-        return { url };
+        return url;
       }
       else {
         return value;
@@ -109,34 +203,74 @@
     },
 
     // 一覧取得
-    list: async (schema, params) => {
-      var ref = flarestore.db.collection(schema.collection);
-      var res = await ref.getWithRelation();
+    list: async (path, params = {}) => {
+      if (!Array.isArray(path)) {
+        path = [path];
+      }
+      if (params.id && params.sub_collection) {
+        path = path.slice(0);
+        path.push(params.id);
+        path.push(params.sub_collection);
+      }
+      var ref = admin.method.createRef(path);
+      // params にキーワードがある場合は疑似 like 検索でヒットするものだけ取ってくるようにする
+      var keyword = params.keyword;
+      if (keyword && schema.search_column) {
+        ref = ref.orderBy(schema.search_column).startAt(keyword).endAt(keyword+'\uf8ff');
+      }
 
+      var res = await ref.getWithRelation();
       return res;
     },
+    createRef: (path, params) => {
+      if (!Array.isArray(path)) {
+        path = [path];
+      }
+      var ref = path.reduce((ref, key, i) => {
+        if (i % 2 === 0) {
+          return ref.collection(admin.schemas[key].collection);
+        }
+        else {
+          return ref.doc(key);
+        }
+      }, flarestore.db);
+      if (params && params.id) {
+        ref = ref.doc(params.id);
+      }
+      return ref;
+    },
     // 単体取得
-    get: async (schema, params) => {
-      var ref = flarestore.db.collection(schema.collection).doc(params.id);
+    get: async (path, params) => {
+      var ref = admin.method.createRef(path, params);
       var res = await ref.getWithRelation();
 
       return res;
     },
     // 更新
-    set: async (schema, params, item) => {
-      var ref = flarestore.db.collection(schema.collection).doc(params.id);
+    set: async (path, params, item) => {
+      var ref = admin.method.createRef(path, params);
       await ref.update(item.data);
     },
 
   };
 
   global.admin.utils = {
+    uuid() {
+      var d = Date.now();
+      if (window.performance && typeof window.performance.now === "function") {
+        d += performance.now(); //use high-precision timer if available
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    },
     // アップロード
     upload: async (file) => {
       var paths = file.name.split('.');
       var ext = paths[paths.length-1];
       var ref = firebase.storage().ref();
-      var snapshot = await ref.child('temp').child(`${Date.now()}.${ext}`).put(file);
+      var snapshot = await ref.child('temp').child(`${admin.utils.uuid()}.${ext}`).put(file);
       var url = await snapshot.ref.getDownloadURL();
       return url;
     },
@@ -150,11 +284,26 @@
       }[mime_type] || 'png';
 
       var ref = firebase.storage().ref();
-      var ref = ref.child('temp').child(`${Date.now()}.${ext}`);
+      var ref = ref.child('temp').child(`${admin.utils.uuid()}.${ext}`);
       var snapshot = await ref.putString(base64, 'data_url');
       var url = await snapshot.ref.getDownloadURL();
 
       return url;
+    },
+  };
+
+  global.admin.auth = {
+    signIn: async ({email, password}) => {
+      var {user} = await firebase.auth().signInWithEmailAndPassword(email, password);
+      var token = await user.getIdToken();
+      app.ref.auth.login(`Bearer ${token}`, user);
+    },
+    signOut: () => {
+      app.ref.auth.logout();
+      firebase.auth().signOut()
+    },
+    isSignIn: () => {
+      return app.ref.auth.isLogin();
     },
   };
 

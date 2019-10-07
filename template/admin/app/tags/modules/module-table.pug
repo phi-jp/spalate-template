@@ -1,9 +1,9 @@
 module-table
-  table.box-shadow.rounded-3.overflow-hidden
-    tr.bg-white.border-bottom
-      th.text-left.p12(each='{opts.headers}') {label}
-    tr.data.bg-white.cursor-pointer(each="{item, index in opts.items}", onclick='{go}')
-      td.p12(each='{schema in parent.opts.schema.show}', class='{schema.class}')
+  table.rounded-6.overflow-hidden
+    tr.bg-white.border-bottom.fs12.lh14
+      th.text-left.px16.py12(each='{opts.headers}') {label}
+    tr.border-bottom-not-last.data.bg-white.cursor-pointer.lh14(each="{item, index in opts.items}", onclick='{go}')
+      td.px16.py9.fs12(each='{schema in parent.opts.schema.show}', class='{schema.class}')
         //- schema ... スキーマ定義
         //- item ... アイテム
         //- value ... 値(item[key])
@@ -16,7 +16,7 @@ module-table
         width: 100%;
         border-collapse: collapse;
         border-spacing: 0;
-
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         .data {
           &:hover {
             background-color: hsl(0, 0%, 90%) !important;
@@ -32,5 +32,9 @@ module-table
 
     this.go = (e) => {
       var id = admin.method.id(e.item.item);
-      app.routeful.go('/' + opts.schema.collection + '/' + id);
+      var path = '/' + opts.schema.collection + '/' + id;
+      if (opts.is_detail) {
+        path = location.pathname.replace(/\/$/g, '') + path;
+      }
+      app.routeful.go(path);
     };

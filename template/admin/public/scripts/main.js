@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
   firebase.initializeApp(config.firebase);
   flarestore.init();
+  await auth.init();
 
   spalate.start(false).then(() => {
-    if (!app.ref.auth.isLogin()) {
+    if (!admin.auth.isSignIn()) {
       app.routeful.go('/auth');
     }
     app.routeful.start(true);

@@ -5,6 +5,9 @@
       return new Promise((resolve) => {
         firebase.auth().onIdTokenChanged(async (user) => {
           if (user) {
+            var token = await firebase.auth().currentUser.getIdToken();
+            app.ref.auth.login(`Bearer ${token}`, user);
+            // call signin api method;
             resolve(user);
           }
           else {
