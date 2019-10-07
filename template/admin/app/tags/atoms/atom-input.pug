@@ -106,8 +106,8 @@ atom-input-multiform
     div.f.fm.mb8.cursor-pointer(each='{item, index in items}', onclick='{editItem}')
       div.mr4 {index}. 
       div.border.p8
-        p(each='{value in item}') 
-          span {opts.option.forms[index].label}: {value}
+        p(each='{form, i in opts.option.forms}') 
+          span {opts.option.forms[i].label}: {item[form.key]}
           br
     div(onclick='{createItem}')
       button.button.primary(type='button') 追加
