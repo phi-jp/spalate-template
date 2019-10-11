@@ -37,8 +37,8 @@
       collection: 'users',
       search_column: 'screen_name',
       show: [
-        { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', },
-        { label: 'ID',    type: 'id', class: 'col1', class: 'w64' },
+        { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', width: '100px', },
+        { label: 'ID',    type: 'id', width: '250px' },
         { label: '名前',  type: 'label', key: 'data.screen_name', class: '' },
       ],
       edit: [
