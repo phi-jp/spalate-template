@@ -1,0 +1,12 @@
+atom-input-original
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}(オリジナル版)
+    input.input.w-full(ref='v', type='{opts.item.input_type || "text"}', placeholder='{opts.item.placeholder}', value='{opts._value}', required='{opts.item.required}', readonly='{opts.item.readonly}')
+
+  script.
+    this.on('mount', () => {
+    });
+    this.getValue = () => {
+      return this.refs.v.value;
+    };
+

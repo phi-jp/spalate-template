@@ -4,6 +4,7 @@ spalate:
     default: app/views/default.pug
   static:
     - 'public'
+    - 'admin'
     - 'app/assets'
   # フロント/サーバー両方で使うコード
   modules:
@@ -17,7 +18,7 @@ spalate:
       - app: 'public/scripts/app.js'
     output: 'public/scripts/modules.js'
   riot:
-    target: 'app/tags'
+    target: ['app/tags', 'admin/tags']
     output: 'public/scripts/tags.js'
     options:
       template: 'pug'
@@ -90,8 +91,8 @@ client:
       - { src: "/scripts/auth.js" }
       - { src: "/scripts/storage.js" }
       - { src: "/scripts/tags.js" }
-      - { src: "/scripts/admin.js" }
       - { src: "/scripts/main.js" }
+      - { src: "/scripts/admin.js" }
   firerest:
     endpoint: https://jsonplaceholder.typicode.com
     cacheKey: noteput.auth.token
