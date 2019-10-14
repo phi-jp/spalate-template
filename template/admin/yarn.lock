@@ -854,10 +854,6 @@ firerest@0.1.5:
   dependencies:
     node-fetch "^2.2.0"
 
-flickable@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/flickable/-/flickable-0.0.5.tgz#fc3f5a0c9ace6e3b5207c912de203471aa99cd2e"
-
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -1443,10 +1439,6 @@ map-visit@^1.0.0:
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
-
-meltline@0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/meltline/-/meltline-0.1.10.tgz#4127f20cedd5f0dcc325c776ada80870b78bbed7"
 
 merge-descriptors@1.0.1:
   version "1.0.1"
@@ -2192,9 +2184,10 @@ rollup@^0.57.1:
     signal-exit "^3.0.2"
     sourcemap-codec "^1.4.1"
 
-routeful@0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/routeful/-/routeful-0.0.9.tgz#ecdd06574876ee5566265814767eacfcfaa4428a"
+routeful@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/routeful/-/routeful-0.1.0.tgz#bcba325f55ab3ac793e45d4cffeb523868a9351e"
+  integrity sha512-JmT2uaQ7gy1gpOCJExYo6wWhpqfqcDQlKGi4TZixW7FOHoc/gFzJJeE8lwlpkZpwXH77B3FixgLWp55fIIfBLg==
   dependencies:
     path-to-regexp "^1.7.0"
 
@@ -2354,9 +2347,9 @@ sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.4.tgz#c63ea927c029dd6bd9a2b7fa03b3fec02ad56e9f"
 
-"spalate@git://github.com/phi-jp/spalate.git#66ff59657fabf39ebb768eeda48c32d66d3cc56d":
+"spalate@git://github.com/phi-jp/spalate.git#eaee22d6d7ed5bc378be481b58610469a8c0d872":
   version "0.2.1"
-  resolved "git://github.com/phi-jp/spalate.git#66ff59657fabf39ebb768eeda48c32d66d3cc56d"
+  resolved "git://github.com/phi-jp/spalate.git#eaee22d6d7ed5bc378be481b58610469a8c0d872"
   dependencies:
     body-parser "^1.18.3"
     buble "^0.19.3"
@@ -2370,14 +2363,12 @@ sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
     ejs "^2.5.7"
     express "^4.16.2"
     firerest "0.1.5"
-    flickable "0.0.5"
     fs-extra "^7.0.1"
     github-download "^0.5.0"
     helmeta "0.0.5"
     js-yaml "^3.10.0"
     less "^3.8.1"
     less-css-builder "^0.0.1"
-    meltline "0.1.10"
     moment "^2.22.0"
     morgan "^1.9.1"
     pretty-error "^2.1.1"
@@ -2385,18 +2376,17 @@ sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
     pug "2.0.1"
     querysearch "0.0.3"
     riot "^3.13.1"
-    routeful "0.0.9"
+    routeful "0.1.0"
     sclazy "0.0.2"
     socialink "0.0.2"
-    spat "0.1.6"
+    spat "0.1.8"
     underscore "^1.8.3"
-    uuaa "0.1.0"
-    vercom "0.0.2"
     xml2js "^0.4.19"
 
-spat@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/spat/-/spat-0.1.6.tgz#ab141f7b9955a6f11ad37ddaacdeb47bb7cd0fcc"
+spat@0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/spat/-/spat-0.1.8.tgz#758fe7f79895dc4c01dbe245cee6cae035b26e5e"
+  integrity sha512-uC4fm38W1BcSeeowOVfrzwsD592pZxZ2O1i6afpNAL0xtaMchL4Ycgvk1CmXW7f/ufZ5ue9UJ2cT6PEgneuV6Q==
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
@@ -2677,10 +2667,6 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
-uuaa@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/uuaa/-/uuaa-0.1.0.tgz#e0a2726f8c3014431d95f03051655cb9d4ddf97d"
-
 uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
@@ -2692,10 +2678,6 @@ vary@~1.1.2:
 vcsurl@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/vcsurl/-/vcsurl-0.1.1.tgz#5e00a109e7381b55b5d45b892533c8ec35c9320c"
-
-vercom@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/vercom/-/vercom-0.0.2.tgz#92c5e66ef772e4d26da8d9acd74431a81b14824e"
 
 verror@1.10.0:
   version "1.10.0"
