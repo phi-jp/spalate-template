@@ -1,0 +1,41 @@
+module-pagination
+  form.f.fm(onsubmit='{inputPage}')
+    div.mr10.cursor-pointer(onclick='{prevPage}') <
+    input.input.w50.h30.text-center.mr10(ref='input', type='number', min='1', max='{opts.page_info.total_pages}', value='{opts.page_info.current_page}')
+    div.mr10 / {opts.page_info.total_pages}
+    div.mr10.cursor-pointer(onclick='{nextPage}') >
+  style(type='less').
+    :scope {
+      display: block;
+    }
+  
+  script.
+
+    this.prevPage = () => {
+      if (opts.page_info.current_page <= 1) return ;
+
+      this.updatePage( opts.page_info.current_page - 1 );
+    };
+
+    this.nextPage = () => {
+      if (opts.page_info.current_page >= opts.page_info.total_pages) return ;
+
+      this.updatePage( opts.page_info.current_page + 1 );
+    };
+
+    this.inputPage = (e) => {
+      e.preventDefault();
+
+      var page = +this.refs.input.value;
+
+      if (page <= 0) page = 1;
+      if (page > opts.page_info.total_pages) page = opts.page_info.total_pages;
+
+      this.updatePage(page);
+    };
+
+    this.updatePage = (page) => {
+      this.parent.trigger('updatepage', {
+        page: page,
+      });
+    };

@@ -220,7 +220,9 @@
       }
 
       var res = await ref.getWithRelation();
-      return res;
+      return {
+        items: res,
+      };
     },
     createRef: (path, params) => {
       if (!Array.isArray(path)) {

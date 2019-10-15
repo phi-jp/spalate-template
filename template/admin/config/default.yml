@@ -3,8 +3,8 @@ spalate:
   views:
     default: app/views/default.pug
   static:
-    - 'public'
-    - 'app/assets'
+    public: /static
+    admin: /admin
   # フロント/サーバー両方で使うコード
   modules:
     target:
@@ -17,7 +17,7 @@ spalate:
       - app: 'public/scripts/app.js'
     output: 'public/scripts/modules.js'
   riot:
-    target: 'app/tags'
+    target: ['app/tags', 'admin/tags']
     output: 'public/scripts/tags.js'
     options:
       template: 'pug'
@@ -50,16 +50,15 @@ client:
     favicon: /images/favicon.ico
     url: https://rabee.jp
     meta:
-      - { name: viewport, content: "width=device-width,height=device-height,user-scalable=no,initial-scale=1,maximum-scale=1,viewport-fit=cover" }
+      - { name: viewport, content: "width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,viewport-fit=cover" }
       - { name: apple-mobile-web-app-capable, content: "yes" }
-      - { name: apple-mobile-web-app-status-bar-style, content: "default" }
-      - { name: apple-mobile-web-app-title, content: "spalate" }
+      - { name: apple-mobile-web-app-status-bar-style, content: "black-translucent" }
     link:
       - { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Noto+Sans+JP" }
       - { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
-      - { rel: "stylesheet", href: "/spalate/plugins/meltline.css" }
-      - { rel: "stylesheet", href: "/fonts/icons/icons.css" }
-      - { rel: "stylesheet", href: "/styles/main.css" }
+      - { rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/phi-jp/meltline@v0.1.10/meltline.css" }
+      - { rel: "stylesheet", href: "/static/fonts/icons/icons.css" }
+      - { rel: "stylesheet", href: "/static/styles/main.css" }
     script:
       # jquery
       - { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js' }
@@ -78,20 +77,24 @@ client:
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-firestore.js' }
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
       # my plugins
-      - { src: '/spalate/plugins/uuaa.js' }
-      - { src: '/spalate/plugins/socialink.js' }
-      - { src: '/spalate/plugins/sclazy.js' }
-      - { src: '/spalate/plugins/vercom.js' }
-      - { src: '/spalate/plugins/flickable.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/spat@v0.1.8/spat.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/uuaa@v0.1.0/uuaa.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/socialink@v0.0.2/socialink.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/sclazy@v0.0.2/sclazy.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/vercom@v0.0.2/vercom.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/flickable@v0.0.5/flickable.js' }
+
       # node modules
-      - { src: '/scripts/modules.js' }
+      - { src: '/static/scripts/modules.js' }
       # user
-      - { src: "/scripts/flarestore.js" }
-      - { src: "/scripts/auth.js" }
-      - { src: "/scripts/storage.js" }
-      - { src: "/scripts/tags.js" }
-      - { src: "/scripts/admin.js" }
-      - { src: "/scripts/main.js" }
+      - { src: "/static/scripts/flarestore.js" }
+      - { src: "/static/scripts/auth.js" }
+      - { src: "/static/scripts/storage.js" }
+      - { src: "/static/scripts/tags.js" }
+      - { src: "/static/scripts/main.js" }
+      # admin
+      - { src: "/admin/scripts/admin.js" }
+
   firerest:
     endpoint: https://jsonplaceholder.typicode.com
     cacheKey: noteput.auth.token
