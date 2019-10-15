@@ -2,7 +2,7 @@
 atom-input-text
   label
     div.fs12.text-gray.mb8 {opts.option.label}
-    input.input.w-full(ref='v', type='{opts.item.input_type || "text"}', placeholder='{opts.item.placeholder}', value='{opts._value}', required='{opts.item.required}', readonly='{opts.item.readonly}')
+    input.input.w-full(ref='v', type='{opts.option.input_type || "text"}', placeholder='{opts.option.placeholder}', value='{opts._value}', required='{opts.option.required}', readonly='{opts.option.readonly}')
 
   script.
     this.on('mount', () => {
@@ -15,7 +15,7 @@ atom-input-text
 atom-input-number
   label
     div.fs12.text-gray.mb8 {opts.option.label}
-    input.input.w-full(ref='v', type='number', placeholder='{opts.item.placeholder}', value='{opts._value}', pattern='{opts.option.pattern || "\\\\d"}', required='{opts.item.required}', readonly='{opts.item.readonly}')
+    input.input.w-full(ref='v', type='number', placeholder='{opts.option.placeholder}', value='{opts._value}', pattern='{opts.option.pattern || "\\\\d"}', required='{opts.option.required}', readonly='{opts.option.readonly}')
 
   script.
     this.on('mount', () => {
