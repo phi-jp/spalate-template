@@ -30,6 +30,12 @@ page-list
 
   script.
     this.on('mount', function() {
+      console.log(this);
+
+      this.on('updatepage', (e) => {
+        this.page = e.page;
+        this._fetch();
+      });
     });
     
     this.on('show', function(e) {
@@ -72,46 +78,23 @@ page-list
     };
 
     this._fetch = async () => {
+      if (!this.schema) return ;
+
       var query = this._normalizeQuery(this.refs.query.value);
 
       var params = {
-        per: 16,
+        per: 32,
         page: this.page,
       };
 
       if (query.text) params.keyword = query.text;
       _.extend(params, query);
 
-      var items = await admin.method.list(this.schema_key, params);
+      var list = await admin.method.list(this.schema_key, params);
 
-      this.items = items;
+      this.items = list.items;
+      this.page_info = list.page_info;
       this.update();
-
-      return ;
-
-      // 取得
-      var ref = flarestore.db.collection(this.schema.collection);
-
-      if (this.schema.order) {
-        ref = ref.orderBy(this.schema.order);
-      }
-
-      ref.get().then(snapshot => {
-        this.items = [];
-        snapshot.forEach(doc => {
-          this.items.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-        this.update();
-        console.log(this.items);
-
-        //- // url を書き換えておく
-        //- if (self.refs.query.value) {
-        //-   history.replaceState(null, null, '?q=' + self.refs.query.value);
-        //- }
-      });
     };
 
     this.create = function(e) {

@@ -21,7 +21,7 @@ atom-input-number
     this.on('mount', () => {
     });
     this.getValue = () => {
-      return this.refs.v.value;
+      return +this.refs.v.value;
     };
 
 // 複数行テキスト
