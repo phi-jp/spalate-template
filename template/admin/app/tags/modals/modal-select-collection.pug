@@ -1,22 +1,28 @@
 modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
-  div.modal.rounded-4.w50vw.h50vh.bg-white(ref='modal')
-    div.f.flex-column.h-full
-      div.h-full.overflow-scroll
-        label.block.p4(each='{item in items}')
+  div.modal.rounded-4.w50vw.h80vh.bg-white.f.flex-column(ref='modal')
+    div.p16.fs18.bold.border-bottom {opts.label}
+    div.border-bottom.flex-fixed
+      input.w-full.py12.px16(ref='search', placeholder='検索', autofocus, oninput='{search}')
+    div.f.flex-column.h-full.p16
+      div.h-full.overflow-scroll.border-bottom
+        div(if='{!items || searching}') loading...
+        label.block.p4.cursor-pointer(each='{item in items}')
           input.mr4(type='checkbox', checked='{item.selected}', onchange='{change}')
           span {item.item.$get(opts.key) || item.item.id}
-      div.h50.border-top
-        button.s-full(onclick='{submit}') 決定
+      div.py12
+        button.w-full.py14.outline-none.bg-main.text-white(onclick='{submit}') 決定
 
   style(scoped, type='less').
     :scope {
+      input {
+        outline: none;
+      }
       background-color: rgba(0, 0, 0, 0.5);
     }
   
   script.
     this.on('mount', async () => {
-      var items = await admin.method.list(this.opts.path);
-
+      var {items} = await admin.method.list(this.opts.path, {limit: 1000, keyword: ''});
       this.items = items.map((item) => {
         var selected = !!this.opts.items.find(temp => temp.id === item.id);
         return { item, selected };
@@ -25,7 +31,11 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
     });
 
     this.change = (e) => {
+      if (!this.opts.multiple) {
+        this.items.forEach(item => item.selected = false)
+      }
       e.item.item.selected = e.target.checked;
+
     };
 
     this.submit = () => {
@@ -34,4 +44,13 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
         items: items
       });
       this.close();
+    };
+
+    this.search = async () => {
+      var {items} = await admin.method.list(this.opts.path, {limit: 1000, keyword: this.refs.search.value});
+      this.items = items.map((item) => {
+        var selected = !!this.opts.items.find(temp => temp.id === item.id);
+        return { item, selected };
+      });
+      this.update();
     };

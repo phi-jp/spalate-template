@@ -53,3 +53,11 @@ atom-label-link
       e.stopPropagation();
       app.routeful.go(e.currentTarget.href);
     };
+atom-label-color
+  div.w40.h30(style='background-color: {opts._value}')
+
+//- 分数表示
+atom-label-divide
+  div.f.fm
+    div.bold {opts._value}
+    div(if='{opts.schema.options.denominator_key}') /{opts.item[opts.schema.options.denominator_key]}

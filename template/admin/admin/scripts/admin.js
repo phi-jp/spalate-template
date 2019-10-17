@@ -35,6 +35,8 @@
     users: {
       label: 'ユーザー',
       collection: 'users',
+      plural: 'users',
+      singular: 'user',
       search_column: 'screen_name',
       show: [
         { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', width: '100px', },
@@ -73,6 +75,9 @@
     groups: {
       label: 'グループ',
       collection: 'groups',
+      plural: 'groups',
+      singular: 'group',
+      search_column: 'title',
       sub_collections: [
         'messages',
       ],
@@ -130,6 +135,8 @@
     messages: {
       label: 'メッセージ',
       collection: 'messages',
+      plural: 'messages',
+      singular: 'message',
       editable: true,
       sub_collections: ['replies'],
       show: [
@@ -155,6 +162,8 @@
     replies: {
       label: 'リプライ',
       collection: 'replies',
+      plural: 'replies',
+      singular: 'reply',
       editable: true,
 
       show: [
@@ -212,7 +221,10 @@
         path.push(params.id);
         path.push(params.sub_collection);
       }
+
+      var schema = admin.schemas[path[path.length - 1]];
       var ref = admin.method.createRef(path);
+
       // params にキーワードがある場合は疑似 like 検索でヒットするものだけ取ってくるようにする
       var keyword = params.keyword;
       if (keyword && schema.search_column) {
@@ -251,7 +263,14 @@
     // 更新
     set: async (path, params, item) => {
       var ref = admin.method.createRef(path, params);
-      await ref.update(item.data);
+      return await ref.update(item.data);
+    },
+
+    // 新規追加
+    add: async (path, params, item) => {
+      var ref = admin.method.createRef(path, params);
+      const response =  await ref.add(item.data);
+      return await flarestore.db.doc(response.path).getWithRelation();
     },
 
   };
