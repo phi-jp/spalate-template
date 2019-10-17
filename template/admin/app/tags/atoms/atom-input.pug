@@ -42,10 +42,30 @@ atom-input-select
   label
     div.fs12.text-gray.mb8 {opts.option.label}
     select.select.border.w-full(ref='select')
-      option(each='{option in opts.option.options}', value='{option.value}', selected='{option.value === parent.opts._value}') {option.label}
+      option(value='', hidden) 未選択
+      option(each='{o in options}', value='{o.value}', selected='{o.value === parent.opts._value}') {o.label}
   script.
-    this.on('mount', () => {
+    this.on('mount', async () => {
+      
+      if (Array.isArray(this.opts.option.options)) {
+        this.options = this.opts.option.options;
+      }
+      else {
+
+        var options = this.opts.option.options;
+    
+        var res = await app.ref.child('/' + options.collection_key).get()
+
+        var items = res[options.collection_key];
+        var label_key = options.label_key;
+        var value_key = options.value_key;
+        // mapping
+        this.options = items.map(item => ({label: item[label_key], value: item[value_key]}));
+    
+        this.update();
+      }
     });
+
     this.getValue = () => {
       return this.refs.select.value;
     };
@@ -54,11 +74,11 @@ atom-input-image
   label
     div.fs12.text-gray.mb8 {opts.option.label}
     div(onclick='{click}')
-      img(src='{url}')
+      img(src="{url || this.opts._value || 'https://dummyimage.com/600x400/000/fff'}")
   
   script.
     this.on('mount', () => {
-      this.url = this.opts._value || 'https://dummyimage.com/600x400/000/fff';
+      this.url = null;
       this.update();
 
       var input = document.createElement('input');
@@ -86,7 +106,7 @@ atom-input-image
     };
 
     this.getValue = () => {
-      return this.url;
+      return this.url || this.opts._value || 'https://dummyimage.com/600x400/000/fff';
     };
 
     this.fileToBase64 = (file) => {
@@ -163,30 +183,45 @@ atom-input-multiform
       });
     };
 
+    this.getValue = () => {
+      return this.items;
+    };
 atom-input-select-collection
-  label
-    div.fs12.text-gray.mb8 {opts.option.label}
-    div.f.fm.row
-      div.fs12.border.rounded-4.p8.mr4.mb4(each='{item in items}') {item.$get(parent.opts.option.options.key)}
-      button.button(onclick='{edit}') 編集
+  div.fs12.text-gray.mb8 {opts.option.label}
+  label.f.fm.row.cursor-pointer
+    div.fs13.border.bg-label.rounded-2.px24.py9.mr4(if='{items.length === 0}') 未選択
+    div.fs13.border.bg-label.rounded-2.px24.py9.mr4(each='{item in items}') {item.$get(parent.opts.option.options.key)}
+    button.rounded-4.px16.py9.ml16.bg-main.text-white.border-main(onclick='{edit}') 選択
+  
+  style(type='less').
+    :scope {
+      .bg-label {
+        background-color: #F5F7FA;
+      }
+    }
   script.
     this.on('mount', async () => {
+      this.schema = admin.schemas[opts.option.options.collection];
+      this.path = [this.opts.option.options.collection];
       await this.syncItems();
     });
+
+    this.on('update', () => {
+      if (this.opts._value && this.items.length === 0) this.syncItems();
+    })
 
     this.syncItems = async () => {
       if (!this.opts._value) {
         this.items = [];
         return ;
       }
-
       // id からデータ化
       var value = this.opts._value;
       if (!Array.isArray(value)) {
         value = [value];
       }
       var promises = value.map(id => {
-        return admin.method.get(opts.option.options.collection, {
+        return admin.method.get(this.path, {
           id: id,
         });
       });
@@ -198,11 +233,12 @@ atom-input-select-collection
       if (e) e.preventDefault();
 
       var modal = spat.modal.open('modal-select-collection', {
-        label: '選択',
-        path: opts.option.options.collection,
+        label: this.opts.option.label,
+        schema: this.schema,
         key: opts.option.options.key,
         multiple: opts.option.multiple,
         items: this.items,
+        path: this.path,
       });
 
       modal.on('submit', ({items}) => {
@@ -216,23 +252,130 @@ atom-input-select-collection
         return this.items.map(i => i.id);
       }
       else {
-        return this.items[0].id;
+        return this.items[0] ? this.items[0].id : '';
       }
     };
 
-atom-input-table
+// datetime picker
+atom-input-datetime
   label
     div.fs12.text-gray.mb8 {opts.option.label}
-  div.f.flex-right
-    div(if='{opts.item.editable !== false}')
-      a.button(href='/{opts.item.api}/new?id={opts.data.id}') 新規作成
+    input.input.w-full(ref='datetimepicker', value='{_value()}' type='text', readonly='{opts.option.readonly}')
+  script.
+    this.on('mount', () => {
+      if (this.opts.option.readonly) return;
+      $(this.refs.datetimepicker).datetimepicker({});
+    });
+
+
+    this._value = () => {
+      var d = this.opts._value || moment().format('x');
+      return moment(d, 'x').format('YYYY/MM/DD HH:mm');
+    }
+
+    this.getValue = () => {
+      var datetime = moment(this.refs.datetimepicker.value, 'YYYY/MM/DD HH:mm').format('x');
+      return +datetime;
+    };
+
+atom-input-bool-button
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
   div
-    div.f.fr.mb16(if='{schema.editable !== false}')
-      a.button.primary.shadow(href='{location.pathname.replace(/\\/$/g, "")}/{schema.collection}/new') + 新規作成
-    module-table(schema='{schema}', headers='{schema.show}', items='{opts._value}', is_detail='{true}')
+    button.button(class='{(flag) ? "primary" : ""}', onclick="{toggle}", type='button') {getBoolText(!flag)}
+
   script.
 
     this.on('mount', () => {
-      this.schema = admin.schemas[opts.option.key.replace(/.*\./, '')];
-      this.update();
+    })
+
+    this.on('update', () => {
+      if (this.flag === undefined && this.opts._value) this.flag = this.opts._value;
     });
+
+    this.getBoolText = function(flag) {
+      var options = this.opts.option.options;
+      if (options) {
+        return (this.flag) ? options[0] : options[1];
+      }
+      else {
+        return this.flag;
+      }
+    };
+
+    this.getValue = function() { 
+      return this.flag;
+    };
+
+    this.toggle = function() {
+      this.flag = !this.flag;
+      this.update();
+    };
+
+atom-input-color-picker
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+  div.f.fm
+    div.w100.h60.rounded-4.cursor-pointer(style='background-color: {getColorHex()}', onclick='{openPicker}')
+    div(ref='picker')
+
+  style(type='less').
+    :scope {
+    }
+  script.
+    this.on('mount', () => {
+      this.picker = Pickr.create({
+        el: this.refs.picker,
+        theme: 'monolith', // or 'monolith', or 'nano'
+        useAsButton: true,
+        swatches: [
+          'rgba(244, 67, 54, 1)',
+          'rgba(233, 30, 99, 1)',
+          'rgba(156, 39, 176, 1)',
+          'rgba(103, 58, 183, 1)',
+          'rgba(63, 81, 181, 1)',
+          'rgba(33, 150, 243, 1)',
+          'rgba(3, 169, 244, 1)',
+          'rgba(0, 188, 212, 1)',
+          'rgba(0, 150, 136, 1)',
+          'rgba(76, 175, 80, 1)',
+          'rgba(139, 195, 74, 1)',
+          'rgba(205, 220, 57, 1)',
+          'rgba(255, 235, 59, 1)',
+          'rgba(255, 193, 7, 1)'
+        ],
+        components: {
+          preview: false,
+          opacity: false,
+          hue: true,
+          interaction: {
+            hex: false,
+            rgba: false,
+            hsla: false,
+            hsva: false,
+            cmyk: false,
+            input: true,
+            clear: false,
+            save: false,
+          },
+        },
+      });
+      this.picker.on('change', (color) => {
+        this.color = color.toHEXA().toString();
+        this.update();
+      });
+    });
+
+    this.getColorHex = () => {
+      return this.color || this.opts._value || this.opts.option.default;
+    };
+    
+    this.getValue = () => {
+      return this.getColorHex();
+    };
+    
+    this.openPicker = () => {
+      this.picker.show();
+    };
+
+

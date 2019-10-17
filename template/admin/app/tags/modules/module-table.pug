@@ -7,7 +7,7 @@ module-table
         //- schema ... スキーマ定義
         //- item ... アイテム
         //- value ... 値(item[key])
-        div(data-is='atom-label-{schema.type}', schema='{schema}', index='{index}', item='{admin.method.input(item, schema)}', _id='{admin.method.id(item, schema)}', _value='{admin.method.value(item, schema)}')
+        div(data-is='atom-label-{schema.type}', schema='{schema}', index='{index}', item='{admin.method.item(item, schema)}', _id='{admin.method.id(item, schema)}', _value='{admin.method.value(item, schema)}')
 
   style(type='less').
     :scope {
@@ -31,10 +31,14 @@ module-table
     });
 
     this.go = (e) => {
+
       var id = admin.method.id(e.item.item);
-      var path = '/' + opts.schema.collection + '/' + id;
-      if (opts.is_detail) {
-        path = location.pathname.replace(/\/$/g, '') + path;
+      var url = null;
+      if (opts.is_subcollection) {
+        url = location.pathname + '/' + opts.schema.plural;
       }
-      app.routeful.go(path);
+      else {
+        url = '/' + opts.schema.collection;
+      }
+      app.routeful.go(url + '/' + id);
     };

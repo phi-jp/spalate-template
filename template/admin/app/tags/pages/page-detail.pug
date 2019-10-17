@@ -6,12 +6,21 @@ page-detail
         div(if='{schema.editable !== false}')
           button.button.danger.mr8(type='button', onclick='{del}', if='{location.pathname !== "/me"}') 削除する
           button.button(type='submit') 保存する
-    div.p30(if='{item}')
+    div.p30
       div.row.bg-white.p32
         div(each='{section in schema.edit}' class='{section.class}')
           div.row
             div(each='{option in section.items}', class='{option.class}')
-              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}')
+              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}', if='{isNew ? !option.editonly : true}')
+
+    div.p30(if='{!isNew}', each='{collection in item.sub_collections}')
+      div.w-full.bg-white.p32
+        div.f.fm.flex-between
+          div.fs16.mb16.bold {admin.schemas[collection.key].label}
+          div.border.border-black.circle.s28.f.fh.cursor-pointer(onclick='{addChildren}', if='{collection.options.canCreate !== false}')
+            div.material-icons add
+        module-table.mb8(schema='{admin.schemas[collection.key]}', headers='{admin.schemas[collection.key].show}', items='{collection.items}', is_subcollection='{true}', options='{collection.options}')
+      
 
   style(scoped, type='less').
     :scope {
@@ -22,20 +31,44 @@ page-detail
 
   script.
     this.on('show', async (e) => {
+
       this.path = e.opts.page.split('/');
+      this.id = e.opts.id;
+      this.path_string = location.pathname;
       this.schema = admin.schemas[this.path[this.path.length - 1]];
-      this.item = await admin.method.get(this.path, {
-        id: e.opts.id,
-      });
-      //- サブコレクションがある場合は、サブコレクションを生やす
-      if (this.schema.sub_collections) {
-        this.item.sub_collections = {};
-        await Promise.all(this.schema.sub_collections.map(async key => {
-          this.item.sub_collections[key] = await admin.method.list(this.path, {
-            id: e.opts.id,
-            sub_collection: key,
-          });
-        }));
+      this.isNew = this.id === 'new';
+
+      // すでに存在していたら
+      if (!this.isNew) {
+        // データを取得する
+        this.item = await admin.method.get(this.path, {
+          id: e.opts.id,
+        });
+        // サブコレのデータを取得
+        if (this.schema.sub_collections) {
+          this.item.sub_collections = [];
+          
+          for (let s of this.schema.sub_collections) {
+            var key = s;
+            var options = {};
+            // option があった場合は option を追加する
+            if (_.isObject(s)) {
+              key = s.key;
+              options = s;
+            }
+            
+            var res = await admin.method.list(this.path, {
+              id: e.opts.id,
+              sub_collection: key,
+            });
+
+            this.item.sub_collections.push({
+              key: key,
+              items: res.items, options,
+            });
+          }
+          riot.update();
+        }
       }
       this.update();
     });
@@ -49,7 +82,7 @@ page-detail
 
       var promises = options.map(async (option) => {
         var ref = this.refs[option.key];
-        if (!ref || !ref.getValue) return ;
+        if (!ref) return ;
 
         var value = await admin.method.output(ref.getValue(), option)
 
@@ -57,9 +90,35 @@ page-detail
       });
 
       await Promise.all(promises);
-      admin.method.set(this.path, {
-        id: this.item.id,
-      }, item);
+
+      if (this.isNew) {
+        var res = await admin.method.add(this.path, {}, item);
+        var id = res.id || res[admin.schemas[this.path[this.path.length - 1]].singular].id;
+        var url = '/' + this.path.join('/') + '/' + id;
+        spat.nav.clearCache();
+        app.routeful.go(url, true);
+        this.item = {}
+        riot.update();
+      }
+      else {
+        await admin.method.set(this.path, {
+          id: this.item.id,
+        }, item);
+      }
 
       spat.toast.message('saved');
+    };
+
+    this.addChildren = (e) => {
+      var sub_collection_path = e.item.collection.key;
+      var url = `${this.path_string}/${sub_collection_path}/new`
+      app.routeful.go(url);
+    };
+
+    this.del = () => {
+      spat.modal.confirm('削除しますか？').on('confirm', async () => {
+        var url = location.pathname;
+        await app.ref.child(url).del();
+        spat.nav.back();
+      });
     };
