@@ -17,11 +17,13 @@ page-list
         a.button.primary.shadow(href='{schema.collection}/new') + 新規作成
 
     div
-      div.f.fr.mb8
+      div.f.fr.mb8(if='{page_info}')
         module-pagination(page_info='{page_info}')
       module-table.mb8(schema='{schema}', headers='{schema.show}', items='{items}')
-      div.f.fr
+      div.f.fr.mb8(if='{page_info}')
         module-pagination(page_info='{page_info}')
+      div.f.fh.p32(if='{cursor}', onclick='{next}')
+        button.button(onclick='{_fetch}') NEXT
 
   style(scoped, type='less').
     :scope {
@@ -85,6 +87,7 @@ page-list
       var params = {
         per: 32,
         page: this.page,
+        cursor: this.cursor,
       };
 
       if (query.text) params.keyword = query.text;
@@ -92,9 +95,14 @@ page-list
 
       var list = await admin.method.list(this.schema_key, params);
 
+      if (list.items.length <= 0) return ;
+
       this.items = list.items;
       this.page_info = list.page_info;
+      this.cursor = list.cursor;
       this.update();
+
+      $(this.root).animate({scrollTop: 0}, 500, 'swing');
     };
 
     this.create = function(e) {

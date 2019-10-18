@@ -231,9 +231,21 @@
         ref = ref.orderBy(schema.search_column).startAt(keyword).endAt(keyword+'\uf8ff');
       }
 
+      // カーソルがある場合, それ以降を取得する
+      if (params.cursor) {
+        var startAfter = await ref.doc(params.cursor).get();
+        ref = ref.startAfter(startAfter);
+      }
+
+      // 取得数上限を設定
+      ref = ref.limit(params.per);
+
       var res = await ref.getWithRelation();
+      var last = res[res.length-1];
+
       return {
         items: res,
+        cursor: last ? last.id : null,
       };
     },
     createRef: (path, params) => {
