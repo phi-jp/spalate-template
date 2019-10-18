@@ -82,7 +82,7 @@ page-detail
 
       var promises = options.map(async (option) => {
         var ref = this.refs[option.key];
-        if (!ref) return ;
+        if (!ref || !ref.getValue) return ;
 
         var value = await admin.method.output(ref.getValue(), option)
 
