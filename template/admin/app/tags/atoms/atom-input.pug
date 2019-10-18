@@ -53,14 +53,14 @@ atom-input-select
       else {
 
         var options = this.opts.option.options;
-    
-        var res = await app.ref.child('/' + options.collection_key).get()
+        var res = await admin.method.list([options.collection_key])
 
-        var items = res[options.collection_key];
+        var items = res.items || res[options.collection_key];
         var label_key = options.label_key;
         var value_key = options.value_key;
+
         // mapping
-        this.options = items.map(item => ({label: item[label_key], value: item[value_key]}));
+        this.options = items.map(item => ({label: item.$get(label_key), value: item.$get(value_key)}));
     
         this.update();
       }

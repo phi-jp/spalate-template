@@ -82,7 +82,7 @@ page-detail
 
       var promises = options.map(async (option) => {
         var ref = this.refs[option.key];
-        if (!ref) return ;
+        if (!ref || !ref.getValue) return ;
 
         var value = await admin.method.output(ref.getValue(), option)
 
@@ -117,8 +117,11 @@ page-detail
 
     this.del = () => {
       spat.modal.confirm('削除しますか？').on('confirm', async () => {
-        var url = location.pathname;
-        await app.ref.child(url).del();
+        await app.utils.sleep(256); // wait for modal animation
+        await admin.method.del(this.path, {
+          id: this.id
+        });
         spat.nav.back();
+        spat.toast.message('削除しました');
       });
     };

@@ -281,9 +281,14 @@
     // 新規追加
     add: async (path, params, item) => {
       var ref = admin.method.createRef(path, params);
-      const response =  await ref.add(item.data);
+      var response =  await ref.add(item.data);
       return await flarestore.db.doc(response.path).getWithRelation();
     },
+    // 削除
+    del: async (path, params) => {
+      var ref = admin.method.createRef(path, params)
+      return await ref.delete()
+    }
 
   };
 

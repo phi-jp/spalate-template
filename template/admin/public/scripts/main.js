@@ -33,9 +33,7 @@ app.utils = {
       img.src = url;
     });
   },
-  uploadFile: () => {
-
-  },
+  sleep: (msec) => new Promise(resolve => setTimeout(resolve, msec)),
 };
 
 Object.defineProperty(Object.prototype, '$get', {  
