@@ -8,11 +8,14 @@ page-list
         div.h40.w1.flex-fixed.bg-grayDF.mr24
         div.text-weak.cursor-pointer.fs12.bold(onclick='{logout}') ログアウト
     form.f.flex-between.fm.mb18(onsubmit='{search}')
-      div.f.fm
+      
+      div.f.fm(show='{schema.hasSearch !== false}')
         label.block.mr12.relative.border-grayDF.border.rounded-full.w300
           input.input.px14.py12.border-none.w-full(ref='query', type='search', oninput='{search}', placeholder='キーワードを入力')
           div.icon-search.text-deepblue.fs24.absolute.r16.t8
         button.button 検索
+      //- 検索ボックスが消えたときのダミー
+      div(if='{schema.hasSearch === false}')
       div(if='{schema.editable !== false}')
         a.button.primary.shadow(href='{schema.collection}/new') + 新規作成
 
