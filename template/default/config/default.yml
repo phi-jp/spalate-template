@@ -79,7 +79,7 @@ client:
       # polyfill
       - { src: https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver }
       # my plugins
-      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/spat@v0.1.8/spat.js' }
+      - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/spat@v0.1.9/spat.js' }
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/uuaa@v0.1.0/uuaa.js' }
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/socialink@v0.0.2/socialink.js' }
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/sclazy@v0.0.2/sclazy.js' }
