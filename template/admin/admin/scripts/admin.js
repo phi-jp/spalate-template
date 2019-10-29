@@ -239,7 +239,9 @@
       }
 
       // 取得数上限を設定
-      ref = ref.limit(params.per);
+      if (params.per) {
+        ref = ref.limit(params.per);
+      }
 
       var res = await ref.getWithRelation();
       var last = res[res.length-1];
@@ -293,6 +295,7 @@
 
     // ボタン用の処理
     selfIntroduction: ({id, path, option, item}) => {
+      alert(`私の名前は ${item.data.screen_name} です!`);
     },
   };
 
