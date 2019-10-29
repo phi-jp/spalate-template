@@ -378,4 +378,25 @@ atom-input-color-picker
       this.picker.show();
     };
 
+atom-input-button
+  button.button(type='button', onclick='{onclick}') {opts.option.label}
 
+  script.
+    this.onclick = () => {
+      var callback = opts.option.callback;
+
+      // 文字列だったら method の中から探してくる
+      if (typeof callback === 'string') {
+        callback = admin.method[callback];
+      }
+
+      // 関数じゃなかったら何もしない
+      if (typeof callback !== 'function') return ;
+
+      callback({
+        id: opts._id,
+        path: opts.path,
+        option: opts.option,
+        item: opts.item,
+      });
+    };
