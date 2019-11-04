@@ -1,8 +1,17 @@
 module-table
-  table.rounded-6.overflow-hidden.table-layout-fixed
+  div.f
+    div.mb16
+      button.button.mr16(onclick='{checkAll}') 全てチェック
+      button.button.mr32(onclick='{uncheckAll}') チェックを解除
+      button.button.mr16(each='{action in opts.schema.actions}', onclick='{doAction}') {action.label}
+  table.rounded-6.overflow-hidden.table-layout-fixed.h-full
     tr.bg-white.border-bottom.fs12.lh14
+      th.w32
       th.text-left.px16.py12(each='{opts.headers}' width='{width}') {label}
     tr.border-bottom-not-last.data.bg-white.cursor-pointer.lh14(each="{item, index in opts.items}", onclick='{go}')
+      td.text-center.h-full
+        label.s-full.f.fh(onclick='{check}')
+          input(type='checkbox', onchange='{checked}', checked='{item.checked}')
       td.px16.py9.fs12(each='{schema in parent.opts.schema.show}', class='{schema.class}')
         //- schema ... スキーマ定義
         //- item ... アイテム
@@ -31,7 +40,6 @@ module-table
     });
 
     this.go = (e) => {
-
       var id = admin.method.id(e.item.item);
       var url = null;
       if (opts.is_subcollection) {
@@ -42,3 +50,48 @@ module-table
       }
       app.routeful.go(url + '/' + id);
     };
+
+    this.check = (e) => {
+      // 詳細への遷移を止める
+      e.stopPropagation();
+    };
+
+    this.checked = (e) => {
+      e.item.item.checked = e.currentTarget.checked;
+    };
+
+    this.checkAll = () => {
+      opts.items.forEach(i => {
+        i.checked = true;
+      });
+      this.update();
+    };
+
+    this.uncheckAll = () => {
+      opts.items.forEach(i => {
+        i.checked = false;
+      });
+      this.update();
+    };
+
+    this.doAction = (e) => {
+      var callback = e.item.action.callback;
+
+      // 文字列だったら method の中から探してくる
+      if (typeof callback === 'string') {
+        callback = admin.method[callback];
+      }
+
+      // 関数じゃなかったら何もしない
+      if (typeof callback !== 'function') return ;
+
+      var items = opts.items.filter(i => {
+        return i.checked;
+      });
+
+      callback({
+        items: items,
+        schema: opts.schema,
+      });
+    };
+    

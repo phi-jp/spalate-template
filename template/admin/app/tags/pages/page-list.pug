@@ -45,12 +45,15 @@ page-list
     
     this.on('show', function(e) {
       riot.update();
-      
-      if (!(e.cached && e.back)) {
-        this.schema_key = e.opts.page;
-        this.schema = admin.schemas[e.opts.page];
-        this.page = 1;
-      }
+
+      // キャッシュがあって back だった場合は何もしない
+      if (e.cached && e.back) return ;
+
+      this.schema_key = e.opts.page;
+      this.schema = admin.schemas[e.opts.page];
+      this.page_info = null;
+      this.cursor = null;
+      this.page = 1;
 
       if (e.query.q) {
         this.refs.query.value = decodeURIComponent(e.query.q);
@@ -112,7 +115,6 @@ page-list
       var data = {};
       data[this.schema.key] = this.schema.defaults;
       app.ref.child(this.schema.api).post(data).then(function() {
-        debugger;
       });
     };
 
