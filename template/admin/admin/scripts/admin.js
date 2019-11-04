@@ -38,6 +38,11 @@
       plural: 'users',
       singular: 'user',
       search_column: 'screen_name',
+      
+      actions: [
+        { label: '削除', callback: 'deleteAll' },
+      ],
+
       show: [
         { label: 'アイコン', key: 'data.icon_image.url', type: 'image', shape: 'circle', width: '100px', },
         { label: 'ID',    type: 'id', width: '250px' },
@@ -296,6 +301,13 @@
     // ボタン用の処理
     selfIntroduction: ({id, path, option, item}) => {
       alert(`私の名前は ${item.data.screen_name} です!`);
+    },
+
+    deleteAll: ({items}) => {
+      // TODO: ちゃんと実装する
+      var ids = items.map(i => i.id);
+
+      spat.modal.alert(ids.join(', ') + 'を削除しました!(TODO)');
     },
   };
 
