@@ -11,7 +11,7 @@ page-detail
         div(each='{section in schema.edit}' class='{section.class}')
           div.row
             div(each='{option in section.items}', class='{option.class}')
-              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}', if='{isNew ? !option.editonly : true}')
+              div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(item, option)}', _value='{admin.method.value(item, option)}', item='{item}', path='{path_string}', if='{isNew ? !option.editonly : true}')
 
     div.p30(if='{!isNew}', each='{collection in item.sub_collections}')
       div.w-full.bg-white.p32

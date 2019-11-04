@@ -62,6 +62,7 @@
                 { label: 'AB', value: 'AB' },
               ]
             },
+            { label: '自己紹介', type: 'button', class: 'col6', callback: 'selfIntroduction' },
           ]
         },
         {
@@ -288,8 +289,11 @@
     del: async (path, params) => {
       var ref = admin.method.createRef(path, params)
       return await ref.delete()
-    }
+    },
 
+    // ボタン用の処理
+    selfIntroduction: ({id, path, option, item}) => {
+    },
   };
 
   global.admin.utils = {
