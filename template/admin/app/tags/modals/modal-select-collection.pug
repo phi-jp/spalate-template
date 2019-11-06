@@ -22,12 +22,7 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
   
   script.
     this.on('mount', async () => {
-      var {items} = await admin.method.list(this.opts.path, {limit: 1000, keyword: ''});
-      this.items = items.map((item) => {
-        var selected = !!this.opts.items.find(temp => temp.id === item.id);
-        return { item, selected };
-      });
-      this.update();
+      this.search();
     });
 
     this.change = (e) => {
@@ -35,7 +30,6 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
         this.items.forEach(item => item.selected = false)
       }
       e.item.item.selected = e.target.checked;
-
     };
 
     this.submit = () => {
@@ -47,7 +41,7 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
     };
 
     this.search = async () => {
-      var {items} = await admin.method.list(this.opts.path, {limit: 1000, keyword: this.refs.search.value});
+      var {items} = await admin.method.list(this.opts.path, {limit: 1000, per: opts.per, query: QuerySearch.parse(this.refs.search.value)});
       this.items = items.map((item) => {
         var selected = !!this.opts.items.find(temp => temp.id === item.id);
         return { item, selected };
