@@ -43,10 +43,9 @@ atom-input-select
     div.fs12.text-gray.mb8 {opts.option.label}
     select.select.border.w-full(ref='select')
       option(value='', hidden) 未選択
-      option(each='{o in options}', value='{o.value}', selected='{o.value === parent.opts._value}') {o.label}
+      option(each='{o in options}', value='{o.value}', disabled='{this.opts.option.readonly && (o.value !== parent.opts._value)}', selected='{o.value === parent.opts._value}') {o.label}
   script.
     this.on('mount', async () => {
-      
       if (Array.isArray(this.opts.option.options)) {
         this.options = this.opts.option.options;
       }
