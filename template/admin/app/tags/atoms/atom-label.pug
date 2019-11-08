@@ -42,7 +42,7 @@ atom-label-age
   div(if='{opts._value}') {moment().diff(moment(opts._value), 'year')}
 
 atom-label-select
-  div(each='{option in opts.item.options}', if='{option.value === opts._value}') {option.label}
+  div(each='{option in opts.schema.options}', if='{option.value === opts._value}') {option.label}
 
 atom-label-link
   div
