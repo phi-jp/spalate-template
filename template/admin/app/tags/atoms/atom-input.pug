@@ -43,10 +43,9 @@ atom-input-select
     div.fs12.text-gray.mb8 {opts.option.label}
     select.select.border.w-full(ref='select')
       option(value='', hidden) 未選択
-      option(each='{o in options}', value='{o.value}', selected='{o.value === parent.opts._value}') {o.label}
+      option(each='{o in options}', value='{o.value}', disabled='{this.opts.option.readonly && (o.value !== parent.opts._value)}', selected='{o.value === parent.opts._value}') {o.label}
   script.
     this.on('mount', async () => {
-      
       if (Array.isArray(this.opts.option.options)) {
         this.options = this.opts.option.options;
       }
@@ -377,6 +376,19 @@ atom-input-color-picker
     this.openPicker = () => {
       this.picker.show();
     };
+
+
+atom-input-array
+  label
+    div.fs12.text-gray.mb8 {opts.option.label}
+    div.row(each='{v in opts._value}')
+      div(each='{option in opts.option.options}', class='{option.class}')
+        div.p16(ref='{option.key}', data-is='atom-input-{option.type}', option='{option}', _id='{admin.method.id(v, option)}', _value='{admin.method.value(v, option)}', if='{isNew ? !option.editonly : true}')
+
+  script.
+    this.on('mount', () => {});
+    this.on('update', () => {});
+
 
 atom-input-button
   button.button(type='button', onclick='{onclick}') {opts.option.label}
