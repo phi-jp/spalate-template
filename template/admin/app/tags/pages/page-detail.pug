@@ -60,6 +60,7 @@ page-detail
             var res = await admin.method.list(this.path, {
               id: e.opts.id,
               sub_collection: key,
+              query: QuerySearch.parse('')
             });
 
             this.item.sub_collections.push({

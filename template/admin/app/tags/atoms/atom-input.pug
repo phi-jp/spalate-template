@@ -52,7 +52,7 @@ atom-input-select
       else {
 
         var options = this.opts.option.options;
-        var res = await admin.method.list([options.collection_key])
+        var res = await admin.method.list([options.collection_key], {query: QuerySearch.parse('')})
 
         var items = res.items || res[options.collection_key];
         var label_key = options.label_key;
