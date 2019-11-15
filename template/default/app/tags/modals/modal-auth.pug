@@ -1,0 +1,86 @@
+modal-auth(spat-animation='bottom')
+  div.s-full.f.flex-column.bg-white.relative(ref='modal')
+    form.container.p64(onsubmit='{auth}')
+      h2.text-center.fs16.mb64 続けるにはアカウントが必要です
+
+      div.sns.f.fh.mb16
+        div(each='{sns in snses}')
+          div.s50.circle.mx8.f.fh(class='bg-{sns.id}')
+            i.material-icons.text-white android
+
+      div.f.fh.mb32
+        div.w-full.h1.bg-gray
+        div.mx16 or
+        div.w-full.h1.bg-gray
+
+      div.mb32
+        input.border-bottom.w-full.px2.py8.mb16(type='email', placeholder='メールアドレス')
+        button.button.primary.w-full.py14 ログイン
+
+      div
+        p.fs12 登録することで、あなたは利用規約に同意し、プライバシーポリシーを熟読して理解したものとみなされます。
+    div.absolute.p16.t0.r0.cursor-pointer(onclick='{close}')
+      i.material-icons close
+  
+  style(type='less').
+    :scope {
+      display: block;
+    }
+
+  script.
+    this.mode = 'signup';
+
+    this.snses = [
+      { id: 'twitter', },
+      { id: 'facebook', },
+      { id: 'google', },
+    ];
+
+    this.auth = async (e) => {
+      e.preventDefault();
+
+      try {
+        var data = await flarebase.auth.signInWithProvider()
+      }
+      catch (error) {
+        if (error.code) {
+
+        }
+      }
+    };
+
+
+    //- this.signInWithProvider = async (provider) => {
+    //-   try {
+    //-     var signin_data = await firebase.auth().signInWithPopup(provider);
+    //-     // 一度 user 情報を取得し直す
+    //-     var user = firebase.auth().currentUser;
+    //-     var token = await user.getIdToken();
+    //-     app.ref.auth.login(`Bearer ${token}`, user);
+
+    //-     var res = await app.ref.child('me/sign_in').post();
+    //-     if (!res.user.is_ready) {
+    //-       var data = res.user;
+    //-       // 画像だけ更新する
+    //-       var image = signin_data.additionalUserInfo.profile.profile_image_url_https || signin_data.additionalUserInfo.profile.picture
+    //-       // fb の場合
+    //-       if (image && image.data && image.data.url) {
+    //-         image = image.data.url;
+    //-       }
+    //-       if (image) {
+    //-         data.icon_image_url = image;
+    //-       }
+    //-       var {user} = await app.ref.child('me').put(data);
+    //-       app.ref.auth.user = user;
+    //-       app.routeful.go('/register', true);
+    //-     }
+    //-     else {
+    //-       spat.toast.message('ログインしました');
+    //-     }
+    //-     riot.update();
+    //-     this.close();
+    //-   }
+    //-   catch (error) {
+    //-     spat.modal.alert(JSON.stringify(error));
+    //-   }
+    //- };

@@ -89,6 +89,7 @@ client:
       - { src: '/static/scripts/modules.js' }
 
       # user
+      - { src: "/static/scripts/flarebase.js" }
       - { src: "/static/scripts/flarestore.js" }
       - { src: "/static/scripts/auth.js" }
       - { src: "/static/scripts/storage.js" }

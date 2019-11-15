@@ -10,7 +10,7 @@ page-settings
   script.
 
     this.items = [
-      { label: 'ログイン・登録' },
+      { label: 'ログイン・登録', onclick: () => { spat.modal.open('modal-auth'); } },
       { label: 'Spalate を応援する', link: 'https://github.com/phi-jp/spalate/' },
       { label: '不具合を報告する', link: 'https://github.com/phi-jp/spalate/issues' },
       { label: 'ログアウト', link: '/', onclick: (e) => this.logout(e) },
@@ -34,4 +34,7 @@ page-settings
       e.preventDefault();
       location.reload();
     };
+
+
+    spat.modal.open('modal-auth');
 
