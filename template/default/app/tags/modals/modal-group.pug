@@ -38,6 +38,9 @@ modal-group(spat-animation='bottom')
         user_ref: flarestore.db.collection('users').doc(uid),
         created_at: Date.now(),
         updated_at: Date.now(),
+        users: [
+          flarestore.db.collection('users').doc(uid)
+        ],
       };
 
       await flarestore.db.collection('groups').add(data);
