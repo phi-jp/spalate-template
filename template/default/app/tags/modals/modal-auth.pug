@@ -61,9 +61,8 @@ modal-auth(spat-animation='bottom')
       var i = spat.modal.indicator();
 
       try {
-        var data = await flarebase.auth.signInWithProvider(e.item.sns.provider);
-        console.log(data);
-        spat.modal.alert('SNS ログインに成功!');
+        var res = await flarebase.auth.signInWithProvider(e.item.sns.provider);
+        this.trigger('authed', res);
       }
       catch (error) {
         spat.modal.alert(error.error_message);
@@ -80,7 +79,7 @@ modal-auth(spat-animation='bottom')
 
       try {
         var res = await flarebase.auth.createUserWithEmailAndPassword(this.refs.email.value, this.refs.password.value);
-        spat.modal.alert('メアド登録に成功!');
+        this.trigger('authed', res);
       }
       catch(error) {
         spat.modal.alert(error.error_message);
@@ -97,7 +96,7 @@ modal-auth(spat-animation='bottom')
 
       try {
         var res = await flarebase.auth.signInWithEmailAndPassword(this.refs.email.value, this.refs.password.value);
-        spat.modal.alert('メアド登録に成功!');
+        this.trigger('authed', res);
       }
       catch(error) {
         spat.modal.alert(error.error_message);

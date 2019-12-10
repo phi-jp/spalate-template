@@ -97,6 +97,8 @@ client:
       - { src: "/static/scripts/flarestore.js" }
       - { src: "/static/scripts/storage.js" }
       - { src: "/static/scripts/tags.js" }
+      - { src: "/static/scripts/utils.js" }
+      - { src: "/static/scripts/store.js" }
       - { src: "/static/scripts/main.js" }
   firerest:
     endpoint: https://jsonplaceholder.typicode.com
