@@ -45,14 +45,18 @@ client:
     title: spalate chat
     description: Hello, spalate!
     type: website
-    image: /images/ogp.png
-    favicon: /images/favicon.ico
+    image: https://chat-rabee-jp.appspot.com/static/images/ogp.png
+    favicon: /static/images/favicon.png
     url: https://rabee.jp
     meta:
       - { name: viewport, content: "width=device-width,height=device-height,user-scalable=no,initial-scale=1,maximum-scale=1,viewport-fit=cover" }
       - { name: apple-mobile-web-app-capable, content: "yes" }
       - { name: apple-mobile-web-app-status-bar-style, content: "default" }
       - { name: apple-mobile-web-app-title, content: "spalate" }
+      # ogp
+      - { name: twitter:card, content: "summary_large_image" }
+      # application id for mobile safari banner
+      # - { name: apple-itunes-app, content: "app-id=1480623780" }
     link:
       - { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
       - { rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/phi-jp/meltline@v0.1.10/meltline.css" }
