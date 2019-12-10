@@ -123,10 +123,10 @@ modal-auth(spat-animation='bottom')
         next = this.refs.formSignUp;
       }
       
-      $(main).fadeOut(500, () => {
+      $(main).fadeOut(256, () => {
         $(prev).hide();
         $(next).show();
-        $(main).fadeIn();
+        $(main).fadeIn(256);
         this.update();
       });
 

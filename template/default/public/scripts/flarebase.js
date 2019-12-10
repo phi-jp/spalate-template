@@ -3,6 +3,38 @@
 
   var flarebase = {
     auth: {
+      // サインインのチェック
+      init() {
+        return new Promise(resolve => {
+          var completed = firebase.auth().onIdTokenChanged(async (user) => {
+            // 監視を停止
+            completed();
+
+            if (user) {
+              resolve(user);
+            }
+            else {
+              resolve(null);
+            }
+          });
+        });
+      },
+
+      // 
+      async signInAnonymously() {
+        try {
+          var res = await firebase.auth().signInAnonymously();
+          var data = this._normalizeResponse(res);
+          return data;
+        }
+        catch(e) {
+          e.error_message = this._codeToErrorMessage(e.code);
+
+          throw e;
+        }
+      },
+
+      // メアド/パスワードでアカウント作成
       async createUserWithEmailAndPassword(email, password) {
         try {
           var res = await firebase.auth().createUserWithEmailAndPassword(email, password);;
@@ -53,19 +85,42 @@
         return new provider;
       },
 
+      async refreshToken() {
+        var user = firebase.auth().currentUser;
+        if (user) {
+          // token の結果を取得
+          var idTokenResult = await user.getIdTokenResult();
+          // token 有効期限を超えていた場合は token をリフレッシュ
+          var isRefresh = moment(idTokenResult.expirationTime).isSameOrBefore();
+  
+          // var isRefresh = true;
+          var token = await firebase.auth().currentUser.getIdToken(isRefresh);
+
+          return token;
+        }
+      },
+
+      isSignIn() {
+        return !!firebase.auth().currentUser;
+      },
+
+      signOut() {
+        firebase.auth().signOut();
+        return this;
+      },
+
       _normalizeResponse(res) {
         // 共通情報
         var user = {
-          display_name: res.user.displayName,
+          uid: res.user.uid,
           screen_name: res.user.uid,
+          display_name: res.user.displayName,
           profile: '',
           email: res.user.email,
           verified_email: res.user.emailVerified,
           image: res.user.photoURL,
           // 匿名かどうか
           isAnonymous: res.user.isAnonymous,
-          // 新しいユーザーかどうか
-          isNewUser: res.additionalUserInfo.isNewUser,
         };
 
         var userInfo = res.additionalUserInfo;
@@ -89,6 +144,8 @@
         return {
           user: user,
           providerId: userInfo.providerId,
+          // 新しいユーザーかどうか
+          isNewUser: userInfo.isNewUser,
         };
       },
 
