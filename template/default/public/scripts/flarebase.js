@@ -31,6 +31,7 @@
         catch (e) {
           e.error_message = {
             'auth/popup-closed-by-user': 'ログイン処理が中断されました',
+            'auth/user-cancelled': 'ログインを拒否しました',
           }[e.code];
 
           throw e;

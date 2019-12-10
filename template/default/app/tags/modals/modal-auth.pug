@@ -6,7 +6,7 @@ modal-auth(spat-animation='bottom')
       div.sns.f.fh.mb16
         div(each='{sns in snses}')
           div.s50.circle.mx8.f.fh(class='bg-{sns.id}', onclick='{authBySNS}')
-            i.material-icons.text-white android
+            img(src='/static/images/sns/{sns.id}.svg')
 
       div.f.fh.mb32
         div.w-full.h1.bg-gray
@@ -32,21 +32,26 @@ modal-auth(spat-animation='bottom')
     this.mode = 'signup';
 
     this.snses = [
-      { id: 'twitter', },
-      { id: 'facebook', },
-      { id: 'google', },
+      { id: 'twitter', provider: 'twitter.com' },
+      { id: 'facebook', provider: 'facebook.com' },
+      { id: 'google', provider: 'google.com' },
     ];
 
     this.authBySNS = async (e) => {
       e.preventDefault();
 
+      var i = spat.modal.indicator();
+
       try {
-        var data = await flarebase.auth.signInWithProvider('google.com');
+        var data = await flarebase.auth.signInWithProvider(e.item.sns.provider);
         console.log(data);
         spat.modal.alert('SNS ログインに成功!');
       }
       catch (error) {
         spat.modal.alert(error.error_message);
+      }
+      finally {
+        i.close();
       }
     };
 
