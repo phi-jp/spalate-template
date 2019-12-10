@@ -7,7 +7,12 @@ modal-group(spat-animation='bottom')
         input.border.p8.rounded-4.w-full.mb32(ref='title', placeholder='グループ名', required)
         button.button.primary 作成
     div.homebar.bg-white.flex-fixed
-  
+    
+  style(type='less').
+    :scope {
+      display: block;
+    }
+
   script.
     this.on('mount', () => {
       this.data = {
