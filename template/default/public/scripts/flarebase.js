@@ -10,16 +10,24 @@
           return data;
         }
         catch(e) {
-          e.error_message = {
-            'auth/email-already-in-use': 'このメールアドレスはすでに使用されています',
-            'auth/invalid-email': 'メールアドレスの形式が間違っています',
-            'uth/operation-not-allowed': 'メールアドレス/パスワードによるアカウント登録が有効化されていません',
-            'auth/weak-password': 'パスワードのセキュリティが弱すぎます',
-          }[e.code];
+          e.error_message = this._codeToErrorMessage(e.code);
 
           throw e;
         }
       },
+      async signInWithEmailAndPassword(email, password) {
+        try {
+          var res = await firebase.auth().signInWithEmailAndPassword(email, password);;
+          var data = this._normalizeResponse(res);
+          return data;
+        }
+        catch(e) {
+          e.error_message = this._codeToErrorMessage(e.code);
+
+          throw e;
+        }
+      },
+
       async signInWithProvider(providerId) {
         try {
           var provider = this.idToProvider(providerId);
@@ -29,10 +37,7 @@
           return data;
         }
         catch (e) {
-          e.error_message = {
-            'auth/popup-closed-by-user': 'ログイン処理が中断されました',
-            'auth/user-cancelled': 'ログインを拒否しました',
-          }[e.code];
+          e.error_message = this._codeToErrorMessage(e.code);
 
           throw e;
         }
@@ -85,6 +90,23 @@
           user: user,
           providerId: userInfo.providerId,
         };
+      },
+
+      _codeToErrorMessage(code) {
+        return {
+          // 共通
+          'auth/argument-error': '不正な引数によるエラーです',
+          // sign up
+          'auth/email-already-in-use': 'このメールアドレスはすでに使用されています',
+          'auth/invalid-email': 'メールアドレスの形式が間違っています',
+          'uth/operation-not-allowed': 'メールアドレス/パスワードによるアカウント登録が有効化されていません',
+          'auth/weak-password': 'パスワードのセキュリティが弱すぎます',
+          // sign in
+          'auth/user-not-found': 'ユーザーが存在しませんでした',
+          // sns
+          'auth/popup-closed-by-user': 'ログイン処理が中断されました',
+          'auth/user-cancelled': 'ログインを拒否しました',
+        }[code];
       },
     },
   };

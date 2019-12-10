@@ -1,6 +1,6 @@
 modal-auth(spat-animation='bottom')
   div.s-full.f.flex-column.bg-white.relative(ref='modal')
-    form.container.p64(onsubmit='{authByEmail}')
+    div.container.p64(ref='main')
       h2.text-center.fs16.mb64 続けるにはアカウントが必要です
 
       div.sns.f.fh.mb16
@@ -13,13 +13,27 @@ modal-auth(spat-animation='bottom')
         div.mx16 or
         div.w-full.h1.bg-gray
 
-      div.mb32
-        input.border-bottom.w-full.px2.py8.mb16(ref='email', type='email', placeholder='メールアドレス')
-        input.border-bottom.w-full.px2.py8.mb16(ref='password', type='password', placeholder='パスワード')
-        button.button.primary.w-full.py14 アカウント登録
+      //- sign up
+      form(if='{mode === "signup"}', ref='formSignUp', onsubmit='{signUpByEmail}')
+        div.mb16
+          input.border-bottom.w-full.px2.py8.mb16(ref='email', type='email', placeholder='メールアドレス')
+          input.border-bottom.w-full.px2.py8.mb16(ref='password', type='password', placeholder='パスワード')
+          button.button.primary.w-full.py14 アカウント登録
 
-      div
-        p.fs12 登録することで、あなたは利用規約に同意し、プライバシーポリシーを熟読して理解したものとみなされます。
+        div.mb32
+          p.fs12 登録することで、あなたは利用規約に同意し、プライバシーポリシーを熟読して理解したものとみなされます。
+        div.text-center
+          button.text-link.bold(type='button', onclick='{toggleAuth}') ログインはこちら
+      //- sign in
+      form(if='{mode === "signin"}', ref='formSignIn', onsubmit='{signInByEmail}')
+        div.mb32
+          input.border-bottom.w-full.px2.py8.mb16(ref='email', type='email', placeholder='メールアドレス')
+          input.border-bottom.w-full.px2.py8.mb16(ref='password', type='password', placeholder='パスワード')
+          button.button.primary.w-full.py14 ログインする
+        div.text-center
+          button.text-link.bold(type='button', onclick='{toggleAuth}') 登録はこちら
+
+    //- 右上のバツボタン
     div.absolute.p16.t0.r0.cursor-pointer(onclick='{close}')
       i.material-icons close
   
@@ -36,6 +50,10 @@ modal-auth(spat-animation='bottom')
       { id: 'facebook', provider: 'facebook.com' },
       { id: 'google', provider: 'google.com' },
     ];
+
+    this.on('mount', () => {
+      $(this.refs.formSignIn).hide();
+    });
 
     this.authBySNS = async (e) => {
       e.preventDefault();
@@ -55,8 +73,10 @@ modal-auth(spat-animation='bottom')
       }
     };
 
-    this.authByEmail = async (e) => {
+    this.signUpByEmail = async (e) => {
       e.preventDefault();
+
+      var i = spat.modal.indicator();
 
       try {
         var res = await flarebase.auth.createUserWithEmailAndPassword(this.refs.email.value, this.refs.password.value);
@@ -65,4 +85,50 @@ modal-auth(spat-animation='bottom')
       catch(error) {
         spat.modal.alert(error.error_message);
       }
+      finally {
+        i.close();
+      }
+    };
+
+    this.signInByEmail = async (e) => {
+      e.preventDefault();
+
+      var i = spat.modal.indicator();
+
+      try {
+        var res = await flarebase.auth.signInWithEmailAndPassword(this.refs.email.value, this.refs.password.value);
+        spat.modal.alert('メアド登録に成功!');
+      }
+      catch(error) {
+        spat.modal.alert(error.error_message);
+      }
+      finally {
+        i.close();
+      }
+    };
+
+    this.toggleAuth = (e) => {
+      var main = this.refs.main;
+      var prev = null;
+      var next = null;
+
+      if (this.mode == 'signup') {
+        this.mode = 'signin';
+        prev = this.refs.formSignUp;
+        next = this.refs.formSignIn;
+      }
+      else {
+        this.mode = 'signup';
+        prev = this.refs.formSignIn;
+        next = this.refs.formSignUp;
+      }
+      
+      $(main).fadeOut(500, () => {
+        $(prev).hide();
+        $(next).show();
+        $(main).fadeIn();
+        this.update();
+      });
+
+      e.preventUpdate = true;
     };
