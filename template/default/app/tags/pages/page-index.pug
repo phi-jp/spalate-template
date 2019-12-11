@@ -22,17 +22,17 @@ page-index
       this.sclazy = Sclazy({
         target: this.refs.body,
         onload: async () => {
-          var per = 8;
-          
-          var ref = flarestore.db.collection('groups').orderBy('updated_at', 'desc').limit(per);
+          var limit = 8;
+          var startAfter = null;
+
           if (this.sclazy.items.length) {
-            var lastItem = this.sclazy.items[this.sclazy.items.length - 1];
             //- 続きから取得するようにする
-            if (lastItem) {
-              ref = ref.startAfter(lastItem.doc);
-            }
+            startAfter = this.sclazy.items[this.sclazy.items.length - 1].doc;
           }
-          var items = await ref.getWithRelation();
+          var items = await app.store.groups.index({
+            limit: limit,
+            startAfter: startAfter,
+          });
 
           this.sclazy.addItems(items);
           this.sclazy.next(items.length !== 0);

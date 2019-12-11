@@ -14,11 +14,19 @@
       }
     },
     groups: {
-      async index({user_id}) {
+      async index({user_id, limit, startAfter}) {
         var ref = flarestore.db.collection('groups');
         
         if (user_id) {
           ref = ref.where('users', 'array-contains', user_id);
+        }
+        ref = ref.orderBy('updated_at', 'desc');
+
+        if (limit) {
+          ref = ref.limit(limit);
+        }
+        if (startAfter) {
+          ref = ref.startAfter(startAfter);
         }
 
         var res = await ref.getWithRelation();
