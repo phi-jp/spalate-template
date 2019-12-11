@@ -5,7 +5,7 @@ page-index
       div.container
         div.posts
           div.m16(data-is='item-chat', each='{item in sclazy.items}', item='{item}')
-          div.text-center.my16(if='{sclazy.isMore()}') loading...
+          //- div.text-center.my16(if='{sclazy.isMore()}') loading...
     module-tabbar
 
   script.
@@ -22,7 +22,7 @@ page-index
       this.sclazy = Sclazy({
         target: this.refs.body,
         onload: async () => {
-          var limit = 8;
+          var limit = 16;
           var startAfter = null;
 
           if (this.sclazy.items.length) {

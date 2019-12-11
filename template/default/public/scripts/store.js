@@ -14,6 +14,9 @@
       }
     },
     groups: {
+      async get(id) {
+        return await flarestore.db.collection('groups').doc(id).getWithRelation();
+      },
       async index({user_id, limit, startAfter}) {
         var ref = flarestore.db.collection('groups');
         
@@ -33,7 +36,7 @@
         var res = await ref.getWithRelation();
 
         return res;
-      }
+      },
     }
   };
 
