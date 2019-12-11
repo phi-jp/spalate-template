@@ -4,7 +4,7 @@ modal-auth(spat-animation='bottom')
       h2.text-center.fs16.mb64 続けるにはアカウントが必要です
 
       div.sns.f.fh.mb16
-        div(each='{sns in snses}')
+        div(each='{sns in snsList}')
           div.s50.circle.mx8.f.fh(class='bg-{sns.id}', onclick='{authBySNS}')
             img(src='/static/images/sns/{sns.id}.svg')
 
@@ -45,7 +45,7 @@ modal-auth(spat-animation='bottom')
   script.
     this.mode = 'signup';
 
-    this.snses = [
+    this.snsList = [
       { id: 'twitter', provider: 'twitter.com' },
       { id: 'facebook', provider: 'facebook.com' },
       { id: 'google', provider: 'google.com' },
