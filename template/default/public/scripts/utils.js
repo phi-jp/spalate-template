@@ -25,7 +25,7 @@
 
     // 登録/ログインを表示
     openAuthModal() {
-      return new Promise(() => {
+      return new Promise((resolve) => {
         var modal = spat.modal.open('modal-auth');
 
         modal.on('authed', async (e) => {
@@ -37,6 +37,10 @@
           }
           
           modal.close();
+        });
+
+        modal.on('close', () => {
+          resolve();
         });
       });
     },
