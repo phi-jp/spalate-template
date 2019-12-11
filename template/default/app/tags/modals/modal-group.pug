@@ -3,7 +3,7 @@ modal-group(spat-animation='bottom')
     module-header(title='グループ作成')
     div.container
       form.px50.py32.text-center(onsubmit='{submit}')
-        img.s128.circle.object-fit-cover.mb16(src='{data.image.url}')
+        img.s128.circle.object-fit-cover.mb16(src='{data.image}')
         input.border.p8.rounded-4.w-full.mb32(ref='title', placeholder='グループ名', required)
         button.button.primary 作成
     div.homebar.bg-white.flex-fixed
@@ -15,11 +15,10 @@ modal-group(spat-animation='bottom')
 
   script.
     this.on('mount', () => {
+      var image = _.shuffle(app.utils.getDummyImages())[0];
       this.data = {
         title: '',
-        image: {
-          url: `https://picsum.photos/400/300?random=${Date.now()}`,
-        },
+        image: image,
       };
       this.update();
     });
@@ -31,9 +30,7 @@ modal-group(spat-animation='bottom')
 
       var data = {
         title: this.refs.title.value,
-        image: {
-          url: this.data.image.url,
-        },
+        image: this.data.image,
         user_id: uid,
         user_ref: flarestore.db.collection('users').doc(uid),
         created_at: Date.now(),
@@ -43,7 +40,9 @@ modal-group(spat-animation='bottom')
         ],
       };
 
-      await flarestore.db.collection('groups').add(data);
+      var ref = await flarestore.db.collection('groups').add(data);
+      
+      app.routeful.go(`/groups/${ref.id}`);
 
       this.close();
     };

@@ -4,7 +4,7 @@ item-message
       p.fs12 {opts.item.data.body}
     a.flex-fixed.text-center.mx8(href='/users/{opts.item.data.user.id}')
       img.s32.circle.object-fit-cover.border.mb4(src='{opts.item.data.user.data.image}')
-      div.fs10 {opts.item.data.user.data.name || '名無し'}
+      div.fs10 {opts.item.data.user.data.display_name || '名無し'}
   
   style(type='less').
     :scope {
