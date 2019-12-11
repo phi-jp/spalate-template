@@ -30,6 +30,7 @@ page-index
             startAfter = this.sclazy.items[this.sclazy.items.length - 1].doc;
           }
           var items = await app.store.groups.index({
+            user_id: firebase.auth().getUid(),
             limit: limit,
             startAfter: startAfter,
           });

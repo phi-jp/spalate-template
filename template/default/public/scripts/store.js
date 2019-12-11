@@ -18,7 +18,8 @@
         var ref = flarestore.db.collection('groups');
         
         if (user_id) {
-          ref = ref.where('users', 'array-contains', user_id);
+          var user_ref = flarestore.db.collection('users').doc(user_id);
+          ref = ref.where('users', 'array-contains', user_ref);
         }
         ref = ref.orderBy('updated_at', 'desc');
 
