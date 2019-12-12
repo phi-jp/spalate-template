@@ -60,7 +60,7 @@
         }
       },
 
-      async signInWithProvider(providerId) {
+      async signInWithPopup(providerId) {
         try {
           var provider = this.idToProvider(providerId);
           var res = await firebase.auth().signInWithPopup(provider);
@@ -73,6 +73,34 @@
 
           throw e;
         }
+      },
+
+      async linkWithPopup(providerId) {
+        try {
+          var provider = this.idToProvider(providerId);
+          var res = await firebase.auth().currentUser.linkWithPopup(provider);
+          var data = this._normalizeResponse(res);
+
+          return data;
+        }
+        catch (e) {
+          e.error_message = this._codeToErrorMessage(e.code);
+
+          throw e;
+        }
+      },
+
+      async signInWithCredential(credential) {
+        try {
+          var res = await firebase.auth().signInWithCredential(credential);
+          return res;
+        }
+        catch (e) {
+          e.error_message = this._codeToErrorMessage(e.code);
+
+          throw e;
+        }
+
       },
 
       idToProvider(providerId) {
@@ -163,6 +191,8 @@
           // sns
           'auth/popup-closed-by-user': 'ログイン処理が中断されました',
           'auth/user-cancelled': 'ログインを拒否しました',
+          'auth/provider-already-linked': 'すでにこのアカウントに紐付けられています',
+          'auth/credential-already-in-use': 'すでに他のアカウントで使用されています',
         }[code];
       },
     },

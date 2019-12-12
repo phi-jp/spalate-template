@@ -31,9 +31,11 @@
         modal.on('authed', async (e) => {
           spat.modal.alert('ログインしました');
   
-          // 新しいユーザーだった場合は DB に登録
-          if (e.isNewUser) {
-            await app.store.users.set(e.user);
+          var user = await app.store.users.get();
+
+          // 未登録のユーザーだったらユーザーデータを上書きする
+          if (user.data.isAnonymous) {
+            await user.doc.ref.set(e.user);
           }
           
           modal.close();

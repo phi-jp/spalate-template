@@ -5,8 +5,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   var user = await flarebase.auth.init();
 
   if (!user) {
-    await flarebase.auth.signInAnonymously();
+    var res = await flarebase.auth.signInAnonymously();
+    // firestore のほうにもユーザーをセット
+    var user = await app.store.users.get();
+    user.doc.ref.set(res.user);
   }
 
-  spalate.start();
+  await spalate.start();
+
+  spat.modal.indicator();  
 });

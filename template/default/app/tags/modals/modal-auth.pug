@@ -61,11 +61,18 @@ modal-auth(spat-animation='bottom')
       var i = spat.modal.indicator();
 
       try {
-        var res = await flarebase.auth.signInWithProvider(e.item.sns.provider);
+        var res = await flarebase.auth.linkWithPopup(e.item.sns.provider);
         this.trigger('authed', res);
       }
       catch (error) {
-        spat.modal.alert(error.error_message);
+        if (error.code === 'auth/credential-already-in-use') {
+          // 他のアカウントに紐付いていた場合, そっちでログインし直す
+          var res = await flarebase.auth.signInWithCredential(error.credential);
+          this.trigger('authed', res);
+        }
+        else {
+          spat.modal.alert(error.error_message);
+        }
       }
       finally {
         i.close();

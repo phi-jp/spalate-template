@@ -3,14 +3,19 @@
 
   app.store = {
     users: {
-      async set(data) {
-        await flarestore.db.collection('users').doc(data.uid).set(data);
+      get collection() {
+        return flarestore.db.collection('users');
       },
-      async get(uid) {
-        return await flarestore.db.collection('users').doc(uid).getWithRelation();
+      // セット(上書き)
+      async set(data) {
+        await this.collection.doc(data.uid).set(data);
+      },
+      async get(uid=firebase.auth().getUid()) {
+        return await this.collection.doc(uid).getWithRelation();
       },
       async index() {
-
+        var items = await this.collection.getWithRelation();
+        return items;
       }
     },
     groups: {
