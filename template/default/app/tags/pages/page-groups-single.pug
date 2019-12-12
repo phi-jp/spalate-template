@@ -16,7 +16,7 @@ page-groups-single(spat-animation='slide')
 
   script.
     this.on('show', async (e) => {
-      this.item = await flarestore.db.collection('groups').doc(e.opts.id).getWithRelation();
+      this.item = await app.store.groups.get(e.opts.id);
 
       this.messages = [];
 
@@ -27,6 +27,12 @@ page-groups-single(spat-animation='slide')
         });
 
         this.update();
+      });
+
+      // 所属していなかったら追加する
+      var me_ref = flarestore.db.collection('users').doc(firebase.auth().getUid());
+      await this.item.doc.ref.update({
+        users: firebase.firestore.FieldValue.arrayUnion(me_ref)
       });
 
       this.update();

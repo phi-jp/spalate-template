@@ -5,34 +5,35 @@ page-index
       div.container
         div.posts
           div.m16(data-is='item-chat', each='{item in sclazy.items}', item='{item}')
-          div.text-center.my16(if='{sclazy.isMore()}') loading...
+          //- div.text-center.my16(if='{sclazy.isMore()}') loading...
     module-tabbar
 
   script.
-    this.fetch = async ({app, modules}) => {
-      console.log('fetch');
-      if (this.posts) return {};
-      var posts = await modules.app.ref.child('posts').get();
-      return {
-        posts: posts.splice(0, 10),
-      };
-    };
+    //- this.fetch = async ({app, modules}) => {
+    //-   console.log('fetch');
+    //-   if (this.posts) return {};
+    //-   var posts = await modules.app.ref.child('posts').get();
+    //-   return {
+    //-     posts: posts.splice(0, 10),
+    //-   };
+    //- };
 
     this.on('mount', async () => {
       this.sclazy = Sclazy({
         target: this.refs.body,
         onload: async () => {
-          var per = 8;
-          
-          var ref = flarestore.db.collection('groups').orderBy('updated_at', 'desc').limit(per);
+          var limit = 16;
+          var startAfter = null;
+
           if (this.sclazy.items.length) {
-            var lastItem = this.sclazy.items[this.sclazy.items.length - 1];
             //- 続きから取得するようにする
-            if (lastItem) {
-              ref = ref.startAfter(lastItem.doc);
-            }
+            startAfter = this.sclazy.items[this.sclazy.items.length - 1].doc;
           }
-          var items = await ref.getWithRelation();
+          var items = await app.store.groups.index({
+            user_id: firebase.auth().getUid(),
+            limit: limit,
+            startAfter: startAfter,
+          });
 
           this.sclazy.addItems(items);
           this.sclazy.next(items.length !== 0);

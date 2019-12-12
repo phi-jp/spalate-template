@@ -2,34 +2,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   firebase.initializeApp(config.firebase);
   flarestore.init();
 
-  var user = await auth.init();
+  var user = await flarebase.auth.init();
 
   if (!user) {
-    auth.signInAnonymously();
+    var res = await flarebase.auth.signInAnonymously();
+    // firestore のほうにもユーザーをセット
+    var user = await app.store.users.get();
+    user.doc.ref.set(res.user);
   }
 
-  spalate.start();
+  await spalate.start();
 });
-
-app.utils = {
-  imageToBase64: (url) => {
-    return new Promise((resolve) => {
-      var img = new Image();
-      img.onload = () => {
-        var canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-  
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        var base64 = canvas.toDataURL('image/jpg');
-        resolve(base64);
-      };
-      img.crossOrigin = 'anonymous';
-      img.src = url;
-    });
-  },
-  uploadFile: () => {
-
-  },
-};

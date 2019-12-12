@@ -8,6 +8,11 @@ modal-user(spat-animation='bottom')
         button.button.primary 更新
     div.homebar.bg-white.flex-fixed
   
+  style(type='less').
+    :scope {
+      display: block;
+    }
+
   script.
     this.on('mount', async () => {
       var uid = firebase.auth().getUid();
