@@ -4,7 +4,7 @@
     _cache: {},
     
     init: () => {
-      flarestore.db = firebase.firestore();
+      flarebase.store.db = firebase.firestore();
     },
 
     get: async (collection, id, opts = {}) => {
@@ -14,7 +14,7 @@
         return cache[id];
       }
       else {
-        var doc = await flarestore.db.collection(collection).doc(id).get();
+        var doc = await flarebase.store.db.collection(collection).doc(id).get();
         var item = await flarestore.normalize(doc, opts);
   
         return item;

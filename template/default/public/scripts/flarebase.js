@@ -2,6 +2,13 @@
 ;((global) => {
 
   var flarebase = {
+    async initializeApp(config) {
+      firebase.initializeApp(config);
+      this.store.init();
+      // ここで currentUser 存在チェック待ち
+      await this.auth.init();
+    },
+
     auth: {
       // サインインのチェック
       init() {
@@ -194,6 +201,13 @@
           'auth/provider-already-linked': 'すでにこのアカウントに紐付けられています',
           'auth/credential-already-in-use': 'すでに他のアカウントで使用されています',
         }[code];
+      },
+    },
+
+    store: {
+      init() {
+        this.db = firebase.firestore();
+        return this;
       },
     },
   };

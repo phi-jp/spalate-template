@@ -32,14 +32,14 @@ page-users-single(spat-animation="{is_mypage ? '' : 'slide'}")
         this.is_mypage = false;
         this.update();
 
-        var ref = flarestore.db.collection('users').where('screen_name', '==', e.opts.id);
+        var ref = flarebase.store.db.collection('users').where('screen_name', '==', e.opts.id);
         var items = await ref.getWithRelation();
         this.user = items[0];
       }
       else {
         this.is_mypage = true;
         this.update();
-        this.user = await flarestore.db.collection('users').doc(uid).getWithRelation();
+        this.user = await flarebase.store.db.collection('users').doc(uid).getWithRelation();
       }
 
       if (this.user.id === uid) {

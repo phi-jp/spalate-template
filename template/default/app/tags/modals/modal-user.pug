@@ -16,7 +16,7 @@ modal-user(spat-animation='bottom')
   script.
     this.on('mount', async () => {
       var uid = firebase.auth().getUid();
-      this.user = await flarestore.db.collection('users').doc(uid).getWithRelation();
+      this.user = await flarebase.store.db.collection('users').doc(uid).getWithRelation();
       this.refs.name.value = this.user.data.name || '';
       this.update();
     });

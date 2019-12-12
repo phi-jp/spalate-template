@@ -32,15 +32,15 @@ modal-group(spat-animation='bottom')
         title: this.refs.title.value,
         image: this.data.image,
         user_id: uid,
-        user_ref: flarestore.db.collection('users').doc(uid),
+        user_ref: flarebase.store.db.collection('users').doc(uid),
         created_at: Date.now(),
         updated_at: Date.now(),
         users: [
-          flarestore.db.collection('users').doc(uid)
+          flarebase.store.db.collection('users').doc(uid)
         ],
       };
 
-      var ref = await flarestore.db.collection('groups').add(data);
+      var ref = await flarebase.store.db.collection('groups').add(data);
       
       app.routeful.go(`/groups/${ref.id}`);
 

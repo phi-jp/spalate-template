@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  firebase.initializeApp(config.firebase);
-  flarestore.init();
+  await flarebase.initializeApp(config.firebase);
 
-  var user = await flarebase.auth.init();
-
-  if (!user) {
+  if (!flarebase.auth.isSignIn()) {
     var res = await flarebase.auth.signInAnonymously();
     // firestore のほうにもユーザーをセット
     var user = await app.store.users.get();

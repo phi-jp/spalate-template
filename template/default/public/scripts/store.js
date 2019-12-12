@@ -4,7 +4,7 @@
   app.store = {
     users: {
       get collection() {
-        return flarestore.db.collection('users');
+        return flarebase.store.db.collection('users');
       },
       // セット(上書き)
       async set(data) {
@@ -20,13 +20,13 @@
     },
     groups: {
       async get(id) {
-        return await flarestore.db.collection('groups').doc(id).getWithRelation();
+        return await flarebase.store.db.collection('groups').doc(id).getWithRelation();
       },
       async index({user_id, limit, startAfter}) {
-        var ref = flarestore.db.collection('groups');
+        var ref = flarebase.store.db.collection('groups');
         
         if (user_id) {
-          var user_ref = flarestore.db.collection('users').doc(user_id);
+          var user_ref = flarebase.store.db.collection('users').doc(user_id);
           ref = ref.where('users', 'array-contains', user_ref);
         }
         ref = ref.orderBy('updated_at', 'desc');
