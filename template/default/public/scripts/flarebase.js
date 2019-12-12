@@ -205,11 +205,103 @@
     },
 
     store: {
+      _cache: {},
+
       init() {
         this.db = firebase.firestore();
         return this;
       },
+
+      async get(collection, id, opts = {}) {
+        var cache = this._cache[collection] || {};
+    
+        if (opts.cache !== false && cache[id]) {
+          return cache[id];
+        }
+        else {
+          var doc = await flarebase.store.db.collection(collection).doc(id).get();
+          var item = await this.normalize(doc, opts);
+    
+          return item;
+        }
+      },
+  
+      async getCollection(ref) {
+        var ss = await ref.get();
+  
+        var promises = ss.docs.map(async (doc) => {
+          var item = await this.normalize(doc);
+          return item;
+        });
+  
+        return Promise.all(promises);
+      },
+  
+      watch(ref, callback) {
+        var isNew = false;
+        return new Promise((resolve) => {
+          var observer = ref.onSnapshot(async (ss) => {
+            for (let change of ss.docChanges()) {
+              var item = await this.normalize(change.doc);
+              callback && callback({change, item, isNew});
+            }
+    
+            isNew = true;
+    
+            resolve(observer);
+          });
+        });
+      },
+  
+      // データ構造整理してついでにキャッシュする
+      async normalize(doc, opts = {}) {
+        var item = {
+          id: doc.id,
+          doc: doc,
+          data: doc.data(),
+        };
+    
+        // キャッシュ
+        var collection = doc.ref.parent.path;
+    
+        if (!this._cache[collection]) {
+          this._cache[collection] = {};
+        }
+        var cache = this._cache[collection];
+        if (cache[doc.id]) {
+          cache[doc.id].doc = item.doc;
+          cache[doc.id].data = item.data;
+        }
+        else {
+          cache[doc.id] = item;
+        }
+    
+        // リレーションの展開
+        if (doc.exists && opts.relation !== false) {
+          var keys = Object.keys(item.data);
+          for (let key of keys) {
+            var value = item.data[key];
+            if (value instanceof firebase.firestore.DocumentReference) {
+              item.data[ key.replace(/_ref$/, '') ] = await this.get(value.parent.path, value.id);
+            }
+          }
+        }
+    
+        return item;
+      },
     },
+  };
+
+  firebase.firestore.DocumentReference.prototype.getWithRelation = function(opts) {
+    return flarebase.store.get(this.parent.path, this.id, opts);
+  };
+
+  firebase.firestore.Query.prototype.getWithRelation = function() {
+    return flarebase.store.getCollection(this);
+  };
+
+  firebase.firestore.Query.prototype.watch = function(callback) {
+    return flarebase.store.watch(this, callback);
   };
 
   global.flarebase = flarebase;
