@@ -27,16 +27,17 @@ modal-group(spat-animation='bottom')
       e.preventDefault();
 
       var uid = firebase.auth().getUid();
+      var user_ref = app.store.users.getReference();
 
       var data = {
         title: this.refs.title.value,
         image: this.data.image,
         user_id: uid,
-        user_ref: flarebase.store.db.collection('users').doc(uid),
+        user_ref: user_ref,
         created_at: Date.now(),
         updated_at: Date.now(),
         users: [
-          flarebase.store.db.collection('users').doc(uid)
+          user_ref,
         ],
       };
 

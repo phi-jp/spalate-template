@@ -3,8 +3,8 @@ modal-user(spat-animation='bottom')
     module-header(title='プロフィール編集')
     div.container
       form.px50.py32.text-center(onsubmit='{submit}')
-        img.s128.circle.object-fit-cover.mb16(src='{user.data.image.url}')
-        input.border.p8.rounded-4.w-full.mb32(ref='name', placeholder='名前', required)
+        img.s128.circle.object-fit-cover.mb16(src='{user.data.image}')
+        input.border.p8.rounded-4.w-full.mb32(ref='display_name', placeholder='名前', required)
         button.button.primary 更新
     div.homebar.bg-white.flex-fixed
   
@@ -15,9 +15,8 @@ modal-user(spat-animation='bottom')
 
   script.
     this.on('mount', async () => {
-      var uid = firebase.auth().getUid();
-      this.user = await flarebase.store.db.collection('users').doc(uid).getWithRelation();
-      this.refs.name.value = this.user.data.name || '';
+      this.user = await app.store.users.get();
+      this.refs.display_name.value = this.user.data.display_name || '';
       this.update();
     });
 
@@ -25,7 +24,7 @@ modal-user(spat-animation='bottom')
       e.preventDefault();
 
       await this.user.doc.ref.update({
-        name: this.refs.name.value,
+        display_name: this.refs.display_name.value,
         updated_at: Date.now(),
       });
 

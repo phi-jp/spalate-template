@@ -6,12 +6,21 @@
       get collection() {
         return flarebase.store.db.collection('users');
       },
+      getReference(uid=firebase.auth().getUid()) {
+        return this.collection.doc(uid);
+      },
+
       // セット(上書き)
       async set(data) {
         await this.collection.doc(data.uid).set(data);
       },
       async get(uid=firebase.auth().getUid()) {
-        return await this.collection.doc(uid).getWithRelation();
+        return this.getReference(uid).getWithRelation();
+      },
+      async getByScreenName(screen_name) {
+        var ref = this.collection.where('screen_name', '==', screen_name);
+        var items = await ref.getWithRelation();
+        return items[0];
       },
       async index() {
         var items = await this.collection.getWithRelation();
