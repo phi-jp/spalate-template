@@ -94,7 +94,6 @@ client:
 
       # user
       - { src: "/static/scripts/flarebase.js" }
-      - { src: "/static/scripts/flarestore.js" }
       - { src: "/static/scripts/storage.js" }
       - { src: "/static/scripts/tags.js" }
       - { src: "/static/scripts/utils.js" }
