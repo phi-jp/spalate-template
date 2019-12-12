@@ -12,6 +12,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await spalate.start();
-
-  spat.modal.indicator();  
 });
