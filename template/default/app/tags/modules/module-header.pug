@@ -22,6 +22,6 @@ module-header
       typeof this.opts.back === 'function' ? this.opts.back() : spat.nav.back();
     };
     this.close = () => {
-      typeof this.opts.close === 'function' ? this.opts.close() : spat.nav.close();
+      typeof this.opts.close === 'function' ? this.opts.close() : spat.nav.back();
     };
     
