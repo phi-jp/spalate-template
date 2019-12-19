@@ -31,7 +31,6 @@ spalate:
   # logger:
   #   type: 'dev'
   plugins:
-    - 'redirect.js'
   cordova:
     platforms:
       - ios
