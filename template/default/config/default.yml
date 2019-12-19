@@ -82,6 +82,8 @@ client:
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
       # polyfill
       - { src: https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver }
+      # hammer
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js' }
       # my plugins
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/spat@v0.1.9/spat.js' }
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/uuaa@v0.1.0/uuaa.js' }
