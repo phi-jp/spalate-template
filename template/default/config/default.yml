@@ -102,8 +102,8 @@ client:
       - { src: "/static/scripts/main.js" }
   firerest:
     endpoint: https://jsonplaceholder.typicode.com
-    cacheKey: noteput.auth.token
-    tokenKey: X-Noteput-Token
+    cacheKey: rabeechat.auth.token
+    tokenKey: Authorization
     debug: true
   firebase:
     apiKey: "AIzaSyCiJjzLD4C5ueJ2wP3UVmdTa7BfiqnWu5Q"
