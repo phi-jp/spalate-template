@@ -87,6 +87,8 @@ client:
       - { src: 'https://www.gstatic.com/firebasejs/5.10.1/firebase-storage.js' }
       # datetime picker
       - { src: 'https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.full.min.js'}
+      # sortable
+      - { src: 'https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.8.1/Sortable.min.js' }
       # my plugins
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/spat@v0.1.9/spat.js' }
       - { src: 'https://cdn.jsdelivr.net/gh/phi-jp/uuaa@v0.1.0/uuaa.js' }
