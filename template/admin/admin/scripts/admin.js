@@ -68,6 +68,17 @@
               ]
             },
             { label: '自己紹介', type: 'button', class: 'col6', callback: 'selfIntroduction' },
+            { 
+              label: '友達一覧', 
+              type: 'order-list', 
+              key: 'data.user_ids', 
+              options: {
+                key: "data.screen_name", 
+                collection: "users",
+                multiple: true
+              }, 
+              class: 'col12'
+            },
           ]
         },
         {

@@ -412,3 +412,107 @@ atom-input-button
         item: opts.item,
       });
     };
+
+atom-input-order-list
+  div.f.fm.mb16
+    div.fs12.text-gray.mr32 {opts.option.label}
+    button.fs12.bold.rounded-4.px10.py8.bg-main.text-white.border-main(onclick='{edit}') 編集
+  div.border.rounded-4.overflow-hidden(ref='list')
+    div.item.fs13.w-full.border-bottom-not-last.p12.px16.f.fm.cursor-pointer(each='{item, index in items}') 
+      i.material-icons.block.mr12.fs14.text-gray.handle reorder
+      div.mr8 {index+1}.
+      a.text-main.text-decoration-underline(href='/recs/{item.id}') {item.$get(parent.opts.option.options.key)}
+
+  style(type='less').
+    :scope {
+      .sortable-ghost {
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .item {
+        background-color: #F5F7FA;
+      }
+    }
+  script.
+    this.on('mount', async () => {
+      this.schema = admin.schemas[opts.option.options.collection];
+      this.path = [this.opts.option.options.collection];
+      this.isSync = false;
+      await this.syncItems();
+      this.createSortable();
+    });
+
+    this.on('update', () => {
+      if (!this.isSync && this.opts._value && this.items.length === 0) {
+        this.syncItems();
+        this.isSync = true;
+      }
+    });
+
+    this.syncItems = async () => {
+      if (!this.opts._value) {
+        this.items = [];
+        return ;
+      }
+      // id からデータ化
+      var value = this.opts._value;
+      if (!Array.isArray(value)) {
+        value = [value];
+      }
+      var promises = value.map(id => {
+        return admin.method.get(this.path, {
+          id: id,
+        });
+      });
+      this.items = await Promise.all(promises);
+      this.update();
+    };
+
+    this.edit = (e) => {
+      if (e) e.preventDefault();
+      var modal = spat.modal.open('modal-select-collection', {
+        label: this.opts.option.label,
+        schema: this.schema,
+        key: this.opts.option.options.key,
+        multiple: this.opts.option.options.multiple,
+        items: this.items,
+        path: this.path,
+      });
+
+      modal.on('submit', ({items}) => {
+        this.items = items;
+        this.update();
+      });
+    };
+
+    this.createSortable = () => {
+      Sortable.create(this.refs.list, {
+        animation: 150,
+        //- delay: 128,
+        scrollSensitivity: 30,
+        scroll: true,
+        ghostClass: 'sortable-ghost',
+        filter: '.ignore',
+        handle: '.handle',
+        direction: 'vertical',
+        onUpdate: (e) => {
+          this.swap(e.oldIndex, e.newIndex);
+        },
+      });
+    };
+
+    this.swap = (from, to) => {
+      // 入れ替え
+      var target = this.items[from];
+      this.items.splice(from, 1);
+      this.items.splice(to, 0, target);
+      this.update();
+    };
+
+    this.getValue = () => {
+      if (this.opts.option.options.multiple) {
+        return this.items.map(i => i.id);
+      }
+      else {
+        return this.items[0] ? this.items[0].id : '';
+      }
+    };
