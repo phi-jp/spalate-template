@@ -1,16 +1,16 @@
 modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
-  div.modal.rounded-4.w50vw.h80vh.bg-white.f.flex-column(ref='modal')
-    div.p16.fs18.bold.border-bottom {opts.label}
-    div.border-bottom.flex-fixed
+  div.modal.rounded-4.w60vw.h80vh.overflow-hidden.bg-white.f.flex-column(ref='modal')
+    div.p16.fs18.bold.border-bottom.flex-fixed {opts.label}
+    div.flex-fixed.border-bottom
       input.w-full.py12.px16(ref='search', placeholder='検索', autofocus, oninput='{search}')
-    div.f.flex-column.h-full.p16
-      div.h-full.overflow-scroll.border-bottom
+    div.f.p16.h-full.overflow-scroll
+      div.h-full
         div(if='{!items || searching}') loading...
         label.block.p4.cursor-pointer(each='{item in items}')
           input.mr4(type='checkbox', checked='{item.selected}', onchange='{change}')
           span {item.item.$get(opts.key) || item.item.id}
-      div.py12
-        button.w-full.py14.outline-none.bg-main.text-white(onclick='{submit}') 決定
+    div.p16.flex-fixed
+      button.w-full.py14.outline-none.bg-main.text-white(onclick='{submit}') 決定
 
   style(scoped, type='less').
     :scope {
@@ -22,20 +22,32 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
   
   script.
     this.on('mount', async () => {
+      this.selectedItems = [...this.opts.items];
       this.search();
     });
 
     this.change = (e) => {
       if (!this.opts.multiple) {
-        this.items.forEach(item => item.selected = false)
+        this.items.forEach(item => item.selected = false);
+        this.selectedItems = [];
       }
-      e.item.item.selected = e.target.checked;
+
+      e.item.item.selected = !e.item.item.selected;
+      this.update();
+
+      if (!e.item.item.selected) {
+        var index = this.selectedItems.findIndex(item => item.id === e.item.item.item.id);
+        this.selectedItems.splice(index, 1);
+      }
+      else {
+        this.selectedItems.push(e.item.item.item);
+      }
+      this.update();
     };
 
     this.submit = () => {
-      var items = this.items.filter(item => item.selected).map(item => item.item);
       this.trigger('submit', {
-        items: items
+        items: this.selectedItems,
       });
       this.close();
     };
@@ -43,7 +55,7 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
     this.search = async () => {
       var {items} = await admin.method.list(this.opts.path, {limit: 1000, per: opts.per, query: QuerySearch.parse(this.refs.search.value)});
       this.items = items.map((item) => {
-        var selected = !!this.opts.items.find(temp => temp.id === item.id);
+        var selected = this.selectedItems ? !!this.selectedItems.find(temp => temp.id === item.id) : false;
         return { item, selected };
       });
       this.update();
