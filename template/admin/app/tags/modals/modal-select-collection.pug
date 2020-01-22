@@ -28,8 +28,10 @@ modal-select-collection.s-full.t0.l0.f.fh.p19(spat-animation="scale")
 
     this.change = (e) => {
       if (!this.opts.multiple) {
-        this.items.forEach(item => item.selected = false)
+        this.items.forEach(item => item.selected = false);
+        this.selectedItems = [];
       }
+
       e.item.item.selected = !e.item.item.selected;
       this.update();
 
